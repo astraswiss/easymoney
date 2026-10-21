@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TEMU QUEST</title>
+  <meta name="claude:viewport-fit-sides" content="cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Baloo+2:wght@500;700;800&family=VT323&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Hintergrund: fallender Hacker-Code -->
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <!-- Konfetti / Funken bei Erfolg -->
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand"><span class="brand-temu">TEMU</span><span class="brand-quest">QUEST</span></div>
+    <button id="sound-toggle" class="chip" type="button" aria-pressed="true">TON: AN</button>
+  </header>
+
+  <!-- Hier werden die Seiten (Screens) hineingesetzt -->
+  <main id="app"></main>
+
+  <script src="js/sound.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/app.js"></script>
+  <!-- Jeder Spielschritt ist eine eigene Datei in js/screens/ -->
+  <script src="js/screens/login.js"></script>
+  <script src="js/screens/zentrale.js"></script>
+  <script>App.start("login");</script>
+</body>
+</html>
