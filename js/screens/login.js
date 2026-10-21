@@ -1,17 +1,15 @@
 /*
  * SCHRITT 1: Das geheime Passwort.
- * Texte und Antworten stehen oben in CONFIG und lassen sich leicht ändern.
+ * Das Passwort steht auf einem Zettel, der bei Baci Bardh zu Hause versteckt ist.
+ * Texte und Passwort stehen oben in CONFIG und lassen sich leicht ändern.
  */
 (function () {
   const CONFIG = {
-    riddle: "„Ich bin das Gegenteil von offen. Was bin ich?“",
-    answer: "geheim",
-    // Antworten, die fast stimmen, bekommen einen freundlichen Tipp
-    almost: ["geschlossen", "zu", "verschlossen", "abgeschlossen"],
-    almostText: "Gute Idee! Aber ein Agent denkt GEHEIMER… 🕵️",
-    wrongText: "FALSCH! 😂 Versuch es noch einmal. Dein Onkel glaubt nicht an dich!",
+    mission: "Das Passwort steht auf einem geheimen Zettel. Der Zettel ist bei Baci Bardh zu Hause versteckt. Findet ihn!",
+    answer: "lisaleosindnichtschlau", // Groß/Klein und Leerzeichen sind egal
+    wrongText: "FALSCH! 😂 Versuch es noch einmal. Baci Bardh glaubt nicht an dich!",
     hintAfter: 3, // nach so vielen Fehlversuchen kommt ein Tipp
-    hintText: "TIPP: Das Wort hat 6 Buchstaben und fängt mit G an.",
+    hintText: "TIPP: Schreibt genau ab, was auf dem Zettel steht. Leerzeichen sind egal.",
     next: "zentrale", // dieser Screen kommt nach dem richtigen Passwort
   };
 
@@ -45,15 +43,15 @@
           <p class="lead" id="lead"></p>
 
           <div class="riddle">
-            <span class="label">&gt; RÄTSEL #1</span>
-            <p>${CONFIG.riddle}</p>
+            <span class="label">&gt; GEHEIMER AUFTRAG</span>
+            <p>${CONFIG.mission}</p>
           </div>
 
           <form class="answer-form" id="login-form" autocomplete="off" novalidate>
             <label for="answer">&gt; GEHEIMES PASSWORT EINGEBEN:</label>
             <div class="answer-row">
               <input class="answer-input" id="answer" name="answer" type="text"
-                     placeholder="______" autocapitalize="characters" autocorrect="off"
+                     placeholder="PASSWORT" autocapitalize="characters" autocorrect="off"
                      spellcheck="false" enterkeyhint="go">
               <button class="btn" type="submit">Passwort prüfen</button>
             </div>
@@ -72,7 +70,7 @@
 
       FX.typeText(
         root.querySelector("#lead"),
-        "Stopp, Agent! Du darfst hier nicht rein. Löse zuerst das Rätsel, um Zugang zu bekommen!"
+        "Stopp, Agent! Du darfst hier nicht rein. Findet zuerst das geheime Passwort, um Zugang zu bekommen!"
       );
 
       input.addEventListener("keydown", (e) => {
@@ -100,10 +98,9 @@
         }
 
         attempts++;
-        const isAlmost = CONFIG.almost.includes(guess);
-        Sound.play(isAlmost ? "almost" : "error");
-        feedback.className = "feedback " + (isAlmost ? "almost" : "wrong");
-        feedback.textContent = isAlmost ? CONFIG.almostText : CONFIG.wrongText;
+        Sound.play("error");
+        feedback.className = "feedback wrong";
+        feedback.textContent = CONFIG.wrongText;
         input.classList.add("wrong");
         FX.replayClass(panel, "shake");
         FX.replayClass(panel, "flash-red");

@@ -260,8 +260,8 @@ body {
   flex: 1 1 200px;
   min-width: 0;
   font-family: var(--font-term);
-  font-size: 2rem; /* groß genug, damit Handys nicht reinzoomen */
-  letter-spacing: 0.2em;
+  font-size: 1.6rem; /* groß genug, damit Handys nicht reinzoomen */
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--cyan);
   caret-color: var(--pink);
