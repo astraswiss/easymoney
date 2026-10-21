@@ -27,6 +27,21 @@ window.CONFIG = {
     { n: 5, screen: "phase5", title: "Der letzte Tresor", opens: "2026-10-25T16:00", digit: null, proof: "DRACHE-99" },
   ],
 
+  // Überraschungen: nur in einem Zeitfenster spielbar.
+  // prize: Franken pro Kind. solved: true, wenn die Kinder den Erfolgs-Code geschickt haben.
+  events: [
+    {
+      id: "doppelagent",
+      screen: "surprise-doppelagent",
+      title: "Der Doppelagent",
+      opens: "2026-10-21T16:00",
+      closes: "2026-10-21T20:00",
+      prize: 10,
+      proof: "ZEBRA-21",
+      solved: false,
+    },
+  ],
+
   // Die zwei Agenten
   // bonus: extra Franken (oder minus) zusätzlich zu den Missionen
   // wishes: Temu-Wünsche, z. B. { name: "Spion-Brille", url: "https://www.temu.com/...", price: 4.9, ordered: false }
@@ -48,7 +63,7 @@ window.CONFIG = {
       avatar: "🤖",
       bonus: 0,
       wishes: [
-        { name: "Wave ball", url: "https://share.temu.com/V7KNscqYGrB", price: 9, ordered: false },
+        { name: "Wave ball", url: "https://share.temu.com/0PMbnStTrVB", price: 9, ordered: false },
       ],
     },
   ],

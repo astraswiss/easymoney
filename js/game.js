@@ -42,6 +42,32 @@
       return Date.now() >= opensAt ? { kind: "open" } : { kind: "waiting", opensAt };
     },
 
+    /*
+     * Überraschungen (CONFIG.events): solved / open / waiting (opensAt) / missed
+     */
+    event(id) {
+      return CONFIG.events.find((e) => e.id === id);
+    },
+    eventSolved(id) {
+      return Game.event(id).solved || solvedNow.has("event:" + id);
+    },
+    eventSolvedOnlyNow(id) {
+      return solvedNow.has("event:" + id) && !Game.event(id).solved;
+    },
+    eventStatus(id) {
+      const ev = Game.event(id);
+      if (Game.eventSolved(id)) return { kind: "solved" };
+      if (Game.testMode) return { kind: "open", closesAt: Date.now() + 3600e3 };
+      const opensAt = new Date(ev.opens).getTime();
+      const closesAt = new Date(ev.closes).getTime();
+      if (Date.now() < opensAt) return { kind: "waiting", opensAt };
+      if (Date.now() >= closesAt) return { kind: "missed" };
+      return { kind: "open", closesAt };
+    },
+    solveEvent(id) {
+      if (!solvedNow.has("event:" + id)) solvedNow.set("event:" + id, Date.now());
+    },
+
     solve(n) {
       if (!solvedNow.has(n)) solvedNow.set(n, Date.now());
     },
@@ -63,7 +89,8 @@
 
     money(id) {
       const solved = CONFIG.phases.filter((p) => Game.isSolved(p.n)).length;
-      return solved * CONFIG.prizePerPhase + (Game.kid(id).bonus || 0);
+      const events = CONFIG.events.filter((e) => Game.eventSolved(e.id)).reduce((s, e) => s + e.prize, 0);
+      return solved * CONFIG.prizePerPhase + events + (Game.kid(id).bonus || 0);
     },
 
     // Wünsche aus CONFIG + neue aus dieser Sitzung

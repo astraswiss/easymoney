@@ -145,6 +145,33 @@
     ].join("\n");
   }
 
+  // Die WhatsApp-Nachricht für eine geschaffte Überraschung
+  function eventReport(id) {
+    const ev = Game.event(id);
+    return [
+      `TEMU QUEST ✅ ÜBERRASCHUNG „${ev.title}“ GESCHAFFT!`,
+      `Erfolgs-Code: ${ev.proof}`,
+      `Gelöst: ${dateTime(Game.solvedAt("event:" + id) || Date.now())}`,
+      `Agenten: ${CONFIG.kids.map((k) => k.agent).join(" und ")}`,
+    ].join("\n");
+  }
+
+  function completeEvent(id, app) {
+    Game.solveEvent(id);
+    const ev = Game.event(id);
+    reward({
+      title: "ÜBERRASCHUNG GESCHAFFT!",
+      sub: "Wow, ihr habt den Doppelagenten besiegt!",
+      lines: [
+        `> ${ev.title} ... GESCHAFFT ✔`,
+        `> +${chf(ev.prize)} EXTRA auf das Konto von jedem Agenten`,
+        `> Erfolgs-Code: ${ev.proof}`,
+      ],
+      share: eventReport(id),
+      onDone: () => app.go("zentrale"),
+    });
+  }
+
   /*
    * Die große Belohnungs-Animation.
    * UI.reward({ title, sub, lines, button, share, onDone })
@@ -270,5 +297,5 @@
     });
   }
 
-  window.UI = { esc, chf, countdown, dateTime, missionFrame, bindBack, wrong, sendDialog, missionReport, reward, completeMission, keypad };
+  window.UI = { esc, chf, countdown, dateTime, missionFrame, bindBack, wrong, sendDialog, missionReport, eventReport, reward, completeMission, completeEvent, keypad };
 })();

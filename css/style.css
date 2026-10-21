@@ -638,6 +638,58 @@ body {
   color: var(--cyan);
 }
 
+/* ---------- Überraschung ---------- */
+.surprise {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  text-align: center;
+  border: 2px solid var(--pink);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(255, 62, 165, 0.1);
+  animation: surprise-glow 1.6s ease-in-out infinite;
+}
+.surprise-solved { animation: none; border-color: var(--green); background: rgba(125, 255, 79, 0.08); }
+@keyframes surprise-glow { 50% { box-shadow: 0 0 28px rgba(255, 62, 165, 0.6); } }
+.surprise-tag { font-family: var(--font-term); font-size: 1.3rem; letter-spacing: 0.15em; color: var(--orange); }
+.surprise strong { font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; color: var(--pink); }
+.surprise p { margin: 0; }
+.surprise small { color: var(--muted); font-variant-numeric: tabular-nums; }
+.surprise .btn { width: 100%; }
+
+.da-stage { font-family: var(--font-term); font-size: 1.3rem; color: var(--orange); text-align: center; letter-spacing: 0.08em; }
+.da-progress { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; }
+.da-progress span { width: 14px; height: 14px; border-radius: 3px; border: 1px solid var(--line); }
+.da-progress span.on { background: var(--green); border-color: var(--green); box-shadow: 0 0 6px var(--green); }
+.da-timer { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.da-timer span { display: block; height: 100%; background: var(--pink); width: 100%; }
+.da-word {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 14vw, 4rem);
+  line-height: 1.1;
+  min-height: 1.2em;
+  background: #000;
+  border-radius: 8px;
+  padding: 12px 0;
+}
+.da-colors { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.da-color {
+  font-family: var(--font-display); font-size: 1.1rem;
+  color: #0a0614;
+  border: 0; border-radius: 8px;
+  padding: 18px 8px;
+  cursor: pointer;
+}
+.da-arrow-box { display: grid; place-items: center; background: #000; border-radius: 8px; padding: 14px 0; }
+.da-arrow { width: 110px; height: 110px; transition: transform 0.1s; }
+.da-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: min(100%, 270px); margin: 0 auto; }
+.da-dir {
+  font-size: 2rem; padding: 10px 0;
+  color: var(--fg); background: rgba(46, 242, 255, 0.06);
+  border: 1px solid var(--cyan); border-radius: 8px; cursor: pointer;
+}
+.da-dir:active { background: var(--cyan); color: #000; }
+
 /* ---------- Trainingslager ---------- */
 .train-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin-top: 6px; }
 .train-card {

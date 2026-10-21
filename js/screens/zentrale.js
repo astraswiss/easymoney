@@ -27,6 +27,8 @@
               Ihr seid echte TEMU-Agenten. Macht jetzt eure Wunschliste fertig und schickt sie an ${UI.esc(CONFIG.uncle)}. Er bestellt dann alles zusammen!
             </div>` : ""}
 
+          <div id="events"></div>
+
           <div class="agents">
             ${CONFIG.kids.map((k) => {
               return `
@@ -102,6 +104,34 @@
 
       drawMissions();
 
+      // Überraschungen: nur sichtbar, solange sie nicht verpasst sind
+      const eventsEl = root.querySelector("#events");
+      function drawEvents() {
+        eventsEl.innerHTML = CONFIG.events.map((ev) => {
+          const st = Game.eventStatus(ev.id);
+          if (st.kind === "missed") return "";
+          let action = "";
+          if (st.kind === "waiting") action = `<span class="pill wait">🔒 öffnet in ${UI.countdown(st.opensAt - Date.now())}</span>`;
+          else if (st.kind === "open") action = `<button class="btn go" type="button" data-event="${ev.id}">Jetzt spielen ▶</button><small>Noch ${UI.countdown(st.closesAt - Date.now())} offen!</small>`;
+          else if (Game.eventSolvedOnlyNow(ev.id)) action = `<button class="btn share" type="button" data-event-report="${ev.id}">Melden 📨</button>`;
+          else action = `<span class="pill ok">✔ geschafft: +${UI.chf(ev.prize)} für jeden</span>`;
+          return `
+            <div class="surprise surprise-${st.kind}">
+              <span class="surprise-tag">⚡ ÜBERRASCHUNG ⚡</span>
+              <strong>${UI.esc(ev.title)}</strong>
+              <p>Nur heute von <b>${new Date(ev.opens).getHours()}:00 bis ${new Date(ev.closes).getHours()}:00 Uhr</b>! Wer es schafft, bekommt <b>${UI.chf(ev.prize)} EXTRA</b> – für jeden von euch!</p>
+              ${action}
+            </div>`;
+        }).join("");
+        eventsEl.querySelectorAll("[data-event]").forEach((b) =>
+          b.addEventListener("click", () => { Sound.play("click"); app.go(Game.event(b.dataset.event).screen); })
+        );
+        eventsEl.querySelectorAll("[data-event-report]").forEach((b) =>
+          b.addEventListener("click", () => UI.sendDialog("ÜBERRASCHUNG MELDEN", UI.eventReport(b.dataset.eventReport)))
+        );
+      }
+      drawEvents();
+
       // Countdown jede Sekunde neu zeichnen; wenn eine Mission aufgeht: Ton
       let lastOpen = CONFIG.phases.filter((p) => Game.status(p.n).kind === "open").length;
       timer = setInterval(() => {
@@ -109,6 +139,7 @@
         if (open > lastOpen) { Sound.play("unlock"); FX.burst(50); }
         lastOpen = open;
         if (list.querySelector(".pill.wait")) drawMissions();
+        if (eventsEl.querySelector(".pill.wait, small")) drawEvents();
       }, 1000);
 
       root.querySelectorAll("[data-train]").forEach((b) =>
