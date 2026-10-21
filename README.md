@@ -21,7 +21,7 @@ Dann sind alle Missionen sofort offen.
    - 4: Der Preis-Detektiv – 3 Einkäufe: Fr. 12.30 (Brille + Lampe), Fr. 17.– mit 3 Sachen
      (Brille + Tinte + Fingerabdruck-Set), Fr. 20.30 mit 4 Sachen (Brille + Lampe + Schnurrbart + Fingerabdruck-Set)
    - 5: Der letzte Tresor – Beweis-Ziffern nach 3 Hinweisen ordnen: 9 4 7 2. Nach 3 Fehlern 30 Sekunden Alarm.
-3. Jede Mission bringt **jedem Kind Fr. 10.–** (Total 100 Franken).
+3. Jede Mission bringt **jedem Kind Fr. 10.–** aufs Konto (Total 100 Franken). Bestellt wird alles zusammen am Ende.
 4. Im **Profil** tragen die Kinder Temu-Links mit Preis ein und schicken sie an Baci Bardh.
 
 ## Was man in `js/config.js` ändert
@@ -37,7 +37,7 @@ Dann sind alle Missionen sofort offen.
 
 ## Was die Kinder per WhatsApp schicken
 
-- **Nach jeder Mission**: Knopf „An Baci Bardh schicken“. Die Nachricht enthält den
+- **Nach jeder Mission**: fertige Nachricht mit grünem Knopf „Per WhatsApp schicken“ (Nummer in `whatsappNumber`). Die Nachricht enthält den
   **Erfolgs-Code** der Mission (`proof` in `js/config.js`). Nur wer die Mission wirklich
   gelöst hat, kennt ihn. Vergessen? In der Zentrale gibt es bei der Mission „Melden 📨“.
 - **Neue Temu-Wünsche**: im Profil, Knopf „Neue Wünsche an Baci Bardh schicken“.

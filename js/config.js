@@ -6,6 +6,10 @@
 window.CONFIG = {
   uncle: "Baci Bardh",
 
+  // Handynummer von Baci Bardh für WhatsApp, z. B. "+41 79 123 45 67".
+  // Leer lassen = die Kinder wählen ihn in WhatsApp selbst aus.
+  whatsappNumber: "",
+
   prizePerPhase: 10, // Franken pro Kind und geschaffter Mission (5 × 10 × 2 = 100)
 
   // Missionen, die Lisa und Leo schon geschafft haben, z. B. [1, 2]

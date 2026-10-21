@@ -62,31 +62,76 @@
   }
 
   /*
-   * Text an Baci Bardh schicken: Teilen-Menü (WhatsApp) → kopieren → Text zum Abschreiben zeigen.
-   * msgEl: Element für die Rückmeldung. Das Textfeld wird bei Bedarf direkt danach eingefügt.
+   * NACHRICHT AN BACI BARDH
+   * Ein Kasten mit: der fertigen Nachricht, Schritt-für-Schritt-Anleitung,
+   * grünem WhatsApp-Knopf und "Text kopieren" als Notlösung.
    */
-  async function sendText(text, msgEl) {
-    Sound.play("click");
-    if (navigator.share) {
-      try { await navigator.share({ title: "TEMU QUEST", text }); msgEl.textContent = "Geschickt! 📨"; return; }
-      catch (err) { if (err && err.name === "AbortError") return; }
-    }
-    try {
-      await navigator.clipboard.writeText(text);
-      msgEl.textContent = `Kopiert! Jetzt in WhatsApp an ${CONFIG.uncle} einfügen.`;
-      return;
-    } catch (err) { /* geht nicht überall */ }
-    let area = msgEl.nextElementSibling;
-    if (!area || !area.classList.contains("send-text")) {
-      area = document.createElement("textarea");
-      area.className = "text-input send-text";
-      area.readOnly = true;
-      area.setAttribute("aria-label", "Nachricht zum Kopieren");
-      msgEl.after(area);
-    }
-    area.value = text;
-    area.select();
-    msgEl.textContent = `Kopiere diesen Text und schick ihn an ${CONFIG.uncle}.`;
+  function whatsappLink(text) {
+    const number = String(CONFIG.whatsappNumber || "").replace(/\D/g, "");
+    return `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+  }
+
+  function sendBox(text) {
+    const direct = Boolean(String(CONFIG.whatsappNumber || "").replace(/\D/g, ""));
+    return `
+      <div class="send-box">
+        <span class="label">&gt; DIESE NACHRICHT SCHICKT IHR AN ${esc(CONFIG.uncle.toUpperCase())}</span>
+        <pre class="msg-preview" data-msg>${esc(text)}</pre>
+        <ol class="send-steps">
+          <li>Drückt auf den grünen Knopf <b>„Per WhatsApp schicken“</b>.</li>
+          <li>WhatsApp geht auf. Die Nachricht ist schon geschrieben.</li>
+          ${direct ? "" : `<li>Wählt <b>${esc(CONFIG.uncle)}</b> aus.</li>`}
+          <li>Drückt auf <b>Senden ➤</b>. Fertig!</li>
+        </ol>
+        <a class="btn whatsapp" href="${esc(whatsappLink(text))}" target="_blank" rel="noopener noreferrer" data-wa>📲 Per WhatsApp schicken</a>
+        <button class="btn ghost" type="button" data-copy>WhatsApp geht nicht auf? Text kopieren</button>
+        <p class="hint" data-copy-msg role="status" aria-live="polite"></p>
+      </div>`;
+  }
+
+  // Knöpfe im Kasten verbinden. onSent wird aufgerufen, sobald WhatsApp oder Kopieren gedrückt wurde.
+  function bindSendBox(container, text, onSent) {
+    const msg = container.querySelector("[data-copy-msg]");
+    container.querySelector("[data-wa]").addEventListener("click", () => {
+      Sound.play("click");
+      msg.textContent = "WhatsApp geht auf … Vergesst nicht, auf Senden zu drücken!";
+      if (onSent) onSent();
+    });
+    container.querySelector("[data-copy]").addEventListener("click", async () => {
+      Sound.play("click");
+      if (onSent) onSent();
+      try {
+        await navigator.clipboard.writeText(text);
+        msg.textContent = `Kopiert! Öffnet WhatsApp, den Chat mit ${CONFIG.uncle}, lange ins Feld drücken → Einfügen → Senden.`;
+      } catch (err) {
+        const range = document.createRange();
+        range.selectNodeContents(container.querySelector("[data-msg]"));
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        msg.textContent = `Der Text ist markiert. Kopiert ihn und schickt ihn in WhatsApp an ${CONFIG.uncle}.`;
+      }
+    });
+  }
+
+  // Eigenes Fenster nur zum Schicken (für "Melden" in der Zentrale und die Wunschliste)
+  function sendDialog(title, text) {
+    const overlay = document.createElement("div");
+    overlay.className = "granted";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-label", title);
+    overlay.innerHTML = `
+      <div class="granted-box">
+        <h2 class="dialog-title">${esc(title)}</h2>
+        ${sendBox(text)}
+        <button class="btn ghost" type="button" data-close>Schließen</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    bindSendBox(overlay, text);
+    overlay.querySelector("[data-close]").addEventListener("click", () => {
+      Sound.play("click");
+      overlay.remove();
+    });
   }
 
   // Die WhatsApp-Nachricht für eine geschaffte Mission
@@ -103,7 +148,8 @@
   /*
    * Die große Belohnungs-Animation.
    * UI.reward({ title, sub, lines, button, share, onDone })
-   * share: Text, der mit einem Extra-Knopf an Baci Bardh geschickt werden kann
+   * share: Nachricht für Baci Bardh. Dann erscheint der WhatsApp-Kasten, und
+   * wer ohne Schicken weiter will, wird zuerst gewarnt.
    */
   async function reward({ title = "GESCHAFFT!", sub = "", lines = [], button = "Zurück zur Zentrale ▶", share, onDone }) {
     const overlay = document.createElement("div");
@@ -118,8 +164,9 @@
         <div class="progress" aria-hidden="true"><span></span></div>
         <div class="reward-actions" hidden>
           ${share ? `
-            <button class="btn share" type="button" data-share>An ${esc(CONFIG.uncle)} schicken 📨</button>
-            <p class="hint" data-share-msg role="status" aria-live="polite">Schickt den Erfolgs-Code an ${esc(CONFIG.uncle)}, sonst ist die Belohnung nach dem Neuladen weg!</p>` : ""}
+            <div class="step-banner">JETZT WICHTIG: Schickt die Nachricht an ${esc(CONFIG.uncle)}! Ohne Nachricht kein Geld.</div>
+            ${sendBox(share)}` : ""}
+          <p class="feedback wrong" data-warn hidden></p>
           <button class="btn go" type="button" data-done>${esc(button)}</button>
         </div>
       </div>`;
@@ -140,13 +187,21 @@
     bar.style.width = "100%";
 
     overlay.querySelector(".reward-actions").hidden = false;
-    const shareBtn = overlay.querySelector("[data-share]");
-    if (shareBtn) {
-      shareBtn.addEventListener("click", () => sendText(share, overlay.querySelector("[data-share-msg]")));
-    }
+    let sent = !share;
+    let warned = false;
+    if (share) bindSendBox(overlay, share, () => { sent = true; });
+
     const btn = overlay.querySelector("[data-done]");
-    (shareBtn || btn).focus();
     btn.addEventListener("click", () => {
+      if (!sent && !warned) {
+        warned = true;
+        Sound.play("error");
+        const warn = overlay.querySelector("[data-warn]");
+        warn.hidden = false;
+        warn.textContent = `Stopp! Habt ihr die Nachricht an ${CONFIG.uncle} geschickt? Ohne Nachricht kein Geld! (Nochmal drücken = trotzdem weiter)`;
+        FX.replayClass(warn, "shake");
+        return;
+      }
       Sound.play("click");
       overlay.remove();
       if (onDone) onDone();
@@ -160,7 +215,7 @@
     const nextPhase = CONFIG.phases[n];
     const lines = [
       `> Mission ${n} ... GESCHAFFT ✔`,
-      `> Belohnung: ${chf(CONFIG.prizePerPhase)} für jeden Agenten`,
+      `> +${chf(CONFIG.prizePerPhase)} auf das Konto von jedem Agenten`,
     ];
     if (p.digit !== null) lines.push(`> Beweis-Ziffer gefunden: ${p.digit}`);
     lines.push(`> Erfolgs-Code: ${p.proof}`);
@@ -215,5 +270,5 @@
     });
   }
 
-  window.UI = { esc, chf, countdown, dateTime, missionFrame, bindBack, wrong, sendText, missionReport, reward, completeMission, keypad };
+  window.UI = { esc, chf, countdown, dateTime, missionFrame, bindBack, wrong, sendDialog, missionReport, reward, completeMission, keypad };
 })();

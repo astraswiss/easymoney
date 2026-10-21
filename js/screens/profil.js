@@ -52,7 +52,7 @@
 
           <div class="task-box">
             <span class="label">&gt; WICHTIG</span>
-            <p>Neue Wünsche sind erst sicher, wenn ihr sie an ${UI.esc(CONFIG.uncle)} schickt. Nicht vorher die Seite neu laden!</p>
+            <p>Neue Wünsche (orange markiert) verschwinden, wenn ihr die Seite schließt. Schickt sie vorher an ${UI.esc(CONFIG.uncle)}! Er trägt sie dann fest ein. Bestellt wird alles zusammen am Ende.</p>
           </div>
           <button class="btn go" type="button" id="send">Neue Wünsche an ${UI.esc(CONFIG.uncle)} schicken 📨</button>
           <p class="hint" id="send-msg" role="status" aria-live="polite"></p>
@@ -131,6 +131,7 @@
         const fresh = Game.newWishes(id);
         const msg = $("#send-msg");
         if (!fresh.length) { msg.textContent = "Du hast noch keine neuen Wünsche eingetragen!"; return; }
+        msg.textContent = "";
         const text = [
           `TEMU QUEST – neue Wünsche von ${kid.name} (${kid.agent})`,
           "",
@@ -138,7 +139,7 @@
           "",
           `Total ganze Liste: ${UI.chf(Game.wishTotal(id))} (Konto: ${UI.chf(Game.money(id))})`,
         ].join("\n");
-        UI.sendText(text, msg);
+        UI.sendDialog("WÜNSCHE SCHICKEN", text);
       });
     },
   });

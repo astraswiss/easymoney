@@ -35,19 +35,22 @@
 
             <section class="rule rule-money">
               <h2><span aria-hidden="true">💰</span> Was gewinnt ihr?</h2>
-              <p>Für jede geschaffte Mission bekommt <b>jeder von euch ${prize}</b>.</p>
+              <p>Für jede geschaffte Mission kommen <b>${prize}</b> auf das Konto von <b>jedem</b> von euch. Das Geld sammelt sich.</p>
               <p>Alle 5 Missionen = <b>${perKid} für ${UI.esc(names[0])}</b> und <b>${perKid} für ${UI.esc(names[1])}</b>.</p>
-              <p>Mit dem Geld sucht ihr euch Sachen auf Temu aus. ${UI.esc(CONFIG.uncle)} bestellt sie für euch.</p>
+              <p>Mit eurem Konto sucht ihr Sachen auf Temu aus. <b>Am Ende</b> bestellt ${UI.esc(CONFIG.uncle)} alles zusammen.</p>
             </section>
 
             <section class="rule rule-important">
               <h2><span aria-hidden="true">📨</span> Ganz wichtig: Melden!</h2>
+              <p>Wenn ihr eine Mission schafft, seht ihr eine fertige Nachricht mit eurem <b>Erfolgs-Code</b>. So schickt ihr sie:</p>
               <ol>
-                <li>Wenn ihr eine Mission schafft, seht ihr einen <b>Erfolgs-Code</b>.</li>
-                <li>Drückt auf <b>„An ${UI.esc(CONFIG.uncle)} schicken“</b>.</li>
-                <li>Schickt die Nachricht per <b>WhatsApp</b> an ${UI.esc(CONFIG.uncle)}.</li>
+                <li>Drückt auf den grünen Knopf <b>„📲 Per WhatsApp schicken“</b>.</li>
+                <li>WhatsApp geht auf. Die Nachricht ist schon geschrieben.</li>
+                ${String(CONFIG.whatsappNumber || "").replace(/\D/g, "") ? "" : `<li>Wählt <b>${UI.esc(CONFIG.uncle)}</b> aus.</li>`}
+                <li>Drückt auf <b>Senden ➤</b>.</li>
               </ol>
-              <p><b>Ohne Erfolgs-Code gibt es kein Geld!</b> Schickt die Nachricht, bevor ihr die Seite schließt. Sonst müsst ihr die Mission nochmal spielen.</p>
+              <p><b>Ohne Nachricht gibt es kein Geld!</b> Schickt sie, bevor ihr die Seite schließt. Sonst ist sie weg und ihr müsst die Mission nochmal spielen.</p>
+              <p>Vergessen? In der Zentrale steht bei der Mission <b>„Melden 📨“</b>, solange die Seite offen ist.</p>
             </section>
 
             <section class="rule">
@@ -62,7 +65,7 @@
                 <li>Kopiert den Link von Temu und schreibt Name und Preis dazu.</li>
                 <li>Drückt auf <b>„Neue Wünsche an ${UI.esc(CONFIG.uncle)} schicken“</b>.</li>
               </ol>
-              <p>Ihr dürft nur so viel aussuchen, wie auf eurem Konto ist.</p>
+              <p>Ihr dürft nur so viel aussuchen, wie auf eurem Konto ist. Neue Wünsche verschwinden, wenn ihr die Seite schließt, also schickt sie gleich!</p>
             </section>
 
             <section class="rule">

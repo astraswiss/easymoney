@@ -24,7 +24,7 @@
           ${done ? `
             <div class="banner-win">
               <strong>MISSION ERFÜLLT! 🏆</strong>
-              Ihr seid echte TEMU-Agenten. Macht jetzt eure Wunschliste fertig und schickt sie an ${UI.esc(CONFIG.uncle)}!
+              Ihr seid echte TEMU-Agenten. Macht jetzt eure Wunschliste fertig und schickt sie an ${UI.esc(CONFIG.uncle)}. Er bestellt dann alles zusammen!
             </div>` : ""}
 
           <div class="agents">
@@ -44,7 +44,6 @@
           <div>
             <span class="label">&gt; MISSIONEN</span>
             <ol class="missions" id="missions"></ol>
-            <p class="hint" id="report-msg" role="status" aria-live="polite"></p>
           </div>
 
           <button class="btn ghost" type="button" id="rules">📜 Spielregeln: Wie funktioniert das Spiel?</button>
@@ -59,7 +58,6 @@
         </div>`;
 
       const list = root.querySelector("#missions");
-      const reportMsg = root.querySelector("#report-msg");
 
       function drawMissions() {
         list.innerHTML = CONFIG.phases.map((p) => {
@@ -80,7 +78,7 @@
             </li>`;
         }).join("");
         list.querySelectorAll("[data-report]").forEach((b) =>
-          b.addEventListener("click", () => UI.sendText(UI.missionReport(Number(b.dataset.report)), reportMsg))
+          b.addEventListener("click", () => UI.sendDialog("MISSION MELDEN", UI.missionReport(Number(b.dataset.report))))
         );
         list.querySelectorAll("[data-play]").forEach((b) =>
           b.addEventListener("click", () => {

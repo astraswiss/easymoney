@@ -587,6 +587,56 @@ body {
 .wish-empty { color: var(--muted); font-style: italic; list-style: none; }
 .send-text { min-height: 9em; font-family: var(--font-term); font-size: 1.1rem; }
 
+/* ---------- WhatsApp-Nachricht ---------- */
+.step-banner {
+  font-weight: 800;
+  color: #0a0614;
+  background: var(--orange);
+  border-radius: 6px;
+  padding: 10px 12px;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 50% { box-shadow: 0 0 22px rgba(255, 138, 31, 0.8); } }
+.send-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px;
+  background: var(--bg-panel);
+}
+.msg-preview {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  line-height: 1.35;
+  color: #111;
+  background: #dcf8c6; /* wie eine WhatsApp-Nachricht */
+  border-radius: 8px 8px 2px 8px;
+  padding: 10px 12px;
+}
+.send-steps { margin: 0; padding-left: 1.4em; }
+.send-steps li + li { margin-top: 2px; }
+.btn.whatsapp {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background: #25d366;
+  box-shadow: 0 0 18px rgba(37, 211, 102, 0.55), 0 4px 0 #128c4a;
+}
+.dialog-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--cyan);
+}
+
 /* ---------- Spielregeln ---------- */
 .rules { display: flex; flex-direction: column; gap: 12px; }
 .rule {
