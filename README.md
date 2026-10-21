@@ -30,6 +30,15 @@ Das ganze Spiel wird in `js/config.js` gesteuert.
 | Agentenname, Bild | `agent`, `avatar` beim Kind |
 | Temu-Wünsche | `wishes` beim Kind, mit `ordered: true` wenn bestellt |
 
+## Was die Kinder per WhatsApp schicken
+
+- **Nach jeder Mission**: Knopf „An Baci Bardh schicken“. Die Nachricht enthält den
+  **Erfolgs-Code** der Mission (`proof` in `js/config.js`). Nur wer die Mission wirklich
+  gelöst hat, kennt ihn. Vergessen? In der Zentrale gibt es bei der Mission „Melden 📨“.
+- **Neue Temu-Wünsche**: im Profil, Knopf „Neue Wünsche an Baci Bardh schicken“.
+
+Danach wird es in `js/config.js` eingetragen.
+
 Ist Mission 1 in `solved`, startet die Seite direkt in der Zentrale.
 Was die Kinder während des Spielens lösen oder eintragen, ist nach dem Neuladen weg,
 bis es in `js/config.js` steht.

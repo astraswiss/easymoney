@@ -56,7 +56,6 @@
           </div>
           <button class="btn go" type="button" id="send">Neue Wünsche an ${UI.esc(CONFIG.uncle)} schicken 📨</button>
           <p class="hint" id="send-msg" role="status" aria-live="polite"></p>
-          <textarea class="text-input send-text" id="send-text" readonly hidden aria-label="Wunschliste als Text"></textarea>
 
           <button class="btn ghost" data-back type="button">&lt; Zurück zur Zentrale</button>
         </div>`;
@@ -128,7 +127,7 @@
         draw();
       });
 
-      $("#send").addEventListener("click", async () => {
+      $("#send").addEventListener("click", () => {
         const fresh = Game.newWishes(id);
         const msg = $("#send-msg");
         if (!fresh.length) { msg.textContent = "Du hast noch keine neuen Wünsche eingetragen!"; return; }
@@ -139,25 +138,7 @@
           "",
           `Total ganze Liste: ${UI.chf(Game.wishTotal(id))} (Konto: ${UI.chf(Game.money(id))})`,
         ].join("\n");
-
-        Sound.play("click");
-        // 1. Teilen-Menü vom Handy (WhatsApp usw.)
-        if (navigator.share) {
-          try { await navigator.share({ title: "TEMU QUEST Wünsche", text }); msg.textContent = "Geschickt! 📨"; return; }
-          catch (err) { if (err && err.name === "AbortError") return; }
-        }
-        // 2. In die Zwischenablage kopieren
-        try {
-          await navigator.clipboard.writeText(text);
-          msg.textContent = `Kopiert! Jetzt in WhatsApp an ${CONFIG.uncle} einfügen.`;
-          return;
-        } catch (err) { /* geht nicht überall */ }
-        // 3. Text anzeigen zum selbst Kopieren
-        const area = $("#send-text");
-        area.hidden = false;
-        area.value = text;
-        area.select();
-        msg.textContent = `Kopiere diesen Text und schick ihn an ${CONFIG.uncle}.`;
+        UI.sendText(text, msg);
       });
     },
   });

@@ -14,12 +14,13 @@ window.CONFIG = {
   // Die 5 Missionen.
   // opens: ab wann die Mission spielbar ist ("JJJJ-MM-TTTHH:MM", null = sofort)
   // digit: Beweis-Ziffer für den Tresor in Mission 5
+  // proof:  Erfolgs-Code, den die Kinder per WhatsApp schicken (nur wer die Mission löst, sieht ihn)
   phases: [
-    { n: 1, screen: "login", title: "Das geheime Passwort", opens: null, digit: 7 },
-    { n: 2, screen: "phase2", title: "Der Code-Knacker", opens: "2026-10-22T16:00", digit: 4 },
-    { n: 3, screen: "phase3", title: "Das Laser-Gedächtnis", opens: "2026-10-23T16:00", digit: 9 },
-    { n: 4, screen: "phase4", title: "Der Preis-Detektiv", opens: "2026-10-24T16:00", digit: 2 },
-    { n: 5, screen: "phase5", title: "Der letzte Tresor", opens: "2026-10-25T16:00", digit: null },
+    { n: 1, screen: "login", title: "Das geheime Passwort", opens: null, digit: 7, proof: "FALKE-17" },
+    { n: 2, screen: "phase2", title: "Der Code-Knacker", opens: "2026-10-22T16:00", digit: 4, proof: "KOBRA-42" },
+    { n: 3, screen: "phase3", title: "Das Laser-Gedächtnis", opens: "2026-10-23T16:00", digit: 9, proof: "BLITZ-63" },
+    { n: 4, screen: "phase4", title: "Der Preis-Detektiv", opens: "2026-10-24T16:00", digit: 2, proof: "TIGER-85" },
+    { n: 5, screen: "phase5", title: "Der letzte Tresor", opens: "2026-10-25T16:00", digit: null, proof: "DRACHE-99" },
   ],
 
   // Die zwei Agenten

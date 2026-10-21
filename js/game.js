@@ -4,13 +4,21 @@
  * gilt nur bis die Seite neu geladen wird.
  */
 (function () {
-  const solvedNow = new Set(); // in dieser Sitzung gelöst
+  const solvedNow = new Map(); // in dieser Sitzung gelöst: Mission → Zeitpunkt
   const newWishes = {}; // in dieser Sitzung hinzugefügt, noch nicht verschickt
   CONFIG.kids.forEach((k) => (newWishes[k.id] = []));
 
   const Game = {
     isSolved(n) {
       return CONFIG.solved.includes(n) || solvedNow.has(n);
+    },
+
+    // Gelöst, aber noch nicht in CONFIG eingetragen → muss per WhatsApp gemeldet werden
+    solvedOnlyNow(n) {
+      return solvedNow.has(n) && !CONFIG.solved.includes(n);
+    },
+    solvedAt(n) {
+      return solvedNow.get(n);
     },
 
     opensAt(n) {
@@ -31,7 +39,7 @@
     },
 
     solve(n) {
-      solvedNow.add(n);
+      if (!solvedNow.has(n)) solvedNow.set(n, Date.now());
     },
 
     allSolved() {

@@ -62,10 +62,50 @@
   }
 
   /*
-   * Die große Belohnungs-Animation.
-   * UI.reward({ title, sub, lines, button, onDone })
+   * Text an Baci Bardh schicken: Teilen-Menü (WhatsApp) → kopieren → Text zum Abschreiben zeigen.
+   * msgEl: Element für die Rückmeldung. Das Textfeld wird bei Bedarf direkt danach eingefügt.
    */
-  async function reward({ title = "GESCHAFFT!", sub = "", lines = [], button = "Zurück zur Zentrale ▶", onDone }) {
+  async function sendText(text, msgEl) {
+    Sound.play("click");
+    if (navigator.share) {
+      try { await navigator.share({ title: "TEMU QUEST", text }); msgEl.textContent = "Geschickt! 📨"; return; }
+      catch (err) { if (err && err.name === "AbortError") return; }
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      msgEl.textContent = `Kopiert! Jetzt in WhatsApp an ${CONFIG.uncle} einfügen.`;
+      return;
+    } catch (err) { /* geht nicht überall */ }
+    let area = msgEl.nextElementSibling;
+    if (!area || !area.classList.contains("send-text")) {
+      area = document.createElement("textarea");
+      area.className = "text-input send-text";
+      area.readOnly = true;
+      area.setAttribute("aria-label", "Nachricht zum Kopieren");
+      msgEl.after(area);
+    }
+    area.value = text;
+    area.select();
+    msgEl.textContent = `Kopiere diesen Text und schick ihn an ${CONFIG.uncle}.`;
+  }
+
+  // Die WhatsApp-Nachricht für eine geschaffte Mission
+  function missionReport(n) {
+    const p = CONFIG.phases[n - 1];
+    return [
+      `TEMU QUEST 🕵️ Mission ${n} „${p.title}“ GESCHAFFT!`,
+      `Erfolgs-Code: ${p.proof}`,
+      `Gelöst: ${dateTime(Game.solvedAt(n) || Date.now())}`,
+      `Agenten: ${CONFIG.kids.map((k) => k.agent).join(" und ")}`,
+    ].join("\n");
+  }
+
+  /*
+   * Die große Belohnungs-Animation.
+   * UI.reward({ title, sub, lines, button, share, onDone })
+   * share: Text, der mit einem Extra-Knopf an Baci Bardh geschickt werden kann
+   */
+  async function reward({ title = "GESCHAFFT!", sub = "", lines = [], button = "Zurück zur Zentrale ▶", share, onDone }) {
     const overlay = document.createElement("div");
     overlay.className = "granted";
     overlay.setAttribute("role", "dialog");
@@ -76,7 +116,12 @@
         ${sub ? `<p class="granted-sub">${esc(sub)}</p>` : ""}
         <pre class="terminal"></pre>
         <div class="progress" aria-hidden="true"><span></span></div>
-        <button class="btn go" type="button" hidden>${esc(button)}</button>
+        <div class="reward-actions" hidden>
+          ${share ? `
+            <button class="btn share" type="button" data-share>An ${esc(CONFIG.uncle)} schicken 📨</button>
+            <p class="hint" data-share-msg role="status" aria-live="polite">Schickt den Erfolgs-Code an ${esc(CONFIG.uncle)}, sonst ist die Belohnung nach dem Neuladen weg!</p>` : ""}
+          <button class="btn go" type="button" data-done>${esc(button)}</button>
+        </div>
       </div>`;
     document.body.appendChild(overlay);
     Sound.play("success");
@@ -94,9 +139,13 @@
     }
     bar.style.width = "100%";
 
-    const btn = overlay.querySelector("button");
-    btn.hidden = false;
-    btn.focus();
+    overlay.querySelector(".reward-actions").hidden = false;
+    const shareBtn = overlay.querySelector("[data-share]");
+    if (shareBtn) {
+      shareBtn.addEventListener("click", () => sendText(share, overlay.querySelector("[data-share-msg]")));
+    }
+    const btn = overlay.querySelector("[data-done]");
+    (shareBtn || btn).focus();
     btn.addEventListener("click", () => {
       Sound.play("click");
       overlay.remove();
@@ -114,6 +163,7 @@
       `> Belohnung: ${chf(CONFIG.prizePerPhase)} für jeden Agenten`,
     ];
     if (p.digit !== null) lines.push(`> Beweis-Ziffer gefunden: ${p.digit}`);
+    lines.push(`> Erfolgs-Code: ${p.proof}`);
     if (nextPhase && Game.opensAt(nextPhase.n) > Date.now()) {
       lines.push(`> Nächste Mission: ${dateTime(Game.opensAt(nextPhase.n))}`);
     }
@@ -122,6 +172,7 @@
       sub: extra.sub || "Super Arbeit, Agenten!",
       lines: (extra.lines || []).concat(lines),
       button: extra.button,
+      share: missionReport(n),
       onDone: () => app.go(extra.next || "zentrale"),
     });
   }
@@ -164,5 +215,5 @@
     });
   }
 
-  window.UI = { esc, chf, countdown, dateTime, missionFrame, bindBack, wrong, reward, completeMission, keypad };
+  window.UI = { esc, chf, countdown, dateTime, missionFrame, bindBack, wrong, sendText, missionReport, reward, completeMission, keypad };
 })();

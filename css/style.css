@@ -339,8 +339,9 @@ body {
   inset: 0;
   z-index: 30;
   display: flex;
-  align-items: center;
+  align-items: safe center;
   justify-content: center;
+  overflow-y: auto;
   padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
   background: rgba(3, 10, 6, 0.86);
   backdrop-filter: blur(3px);
@@ -417,6 +418,9 @@ body {
 
 .btn.small { font-size: 0.85rem; padding: 8px 12px; box-shadow: 0 0 10px rgba(255, 62, 165, 0.5), 0 3px 0 #a01a63; }
 .btn.small.ghost { box-shadow: none; font-size: 1.05rem; padding: 5px 10px; }
+.btn.share { background: var(--cyan); box-shadow: 0 0 18px rgba(46, 242, 255, 0.55), 0 4px 0 #128a94; }
+.btn.small.share { box-shadow: 0 0 10px rgba(46, 242, 255, 0.5), 0 3px 0 #128a94; }
+.reward-actions { display: flex; flex-direction: column; gap: 10px; }
 .btn.danger { background: var(--red); box-shadow: 0 0 14px rgba(255, 51, 85, 0.5), 0 4px 0 #8c1426; }
 
 .pill {

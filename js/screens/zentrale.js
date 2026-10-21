@@ -44,6 +44,7 @@
           <div>
             <span class="label">&gt; MISSIONEN</span>
             <ol class="missions" id="missions"></ol>
+            <p class="hint" id="report-msg" role="status" aria-live="polite"></p>
           </div>
 
           ${digits.length ? `
@@ -56,12 +57,14 @@
         </div>`;
 
       const list = root.querySelector("#missions");
+      const reportMsg = root.querySelector("#report-msg");
 
       function drawMissions() {
         list.innerHTML = CONFIG.phases.map((p) => {
           const st = Game.status(p.n);
           let right = "";
-          if (st.kind === "solved") right = `<span class="pill ok">✔ +${UI.chf(CONFIG.prizePerPhase)}</span>`;
+          if (st.kind === "solved" && Game.solvedOnlyNow(p.n)) right = `<button class="btn small share" type="button" data-report="${p.n}">Melden 📨</button>`;
+          else if (st.kind === "solved") right = `<span class="pill ok">✔ +${UI.chf(CONFIG.prizePerPhase)}</span>`;
           else if (st.kind === "open") right = `<button class="btn small" type="button" data-play="${p.n}">Starten ▶</button>`;
           else right = `<span class="pill wait">🔒 ${UI.countdown(st.opensAt - Date.now())}</span>`;
           const title = st.kind === "waiting" ? "??? STRENG GEHEIM ???" : p.title;
@@ -74,6 +77,9 @@
               ${right}
             </li>`;
         }).join("");
+        list.querySelectorAll("[data-report]").forEach((b) =>
+          b.addEventListener("click", () => UI.sendText(UI.missionReport(Number(b.dataset.report)), reportMsg))
+        );
         list.querySelectorAll("[data-play]").forEach((b) =>
           b.addEventListener("click", () => {
             Sound.play("click");
