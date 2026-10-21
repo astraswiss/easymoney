@@ -1,10 +1,14 @@
 /*
- * DIE GEHEIME ZENTRALE – Platzhalter für den nächsten Schritt.
- * Hier kommt später die nächste Mission hin.
+ * DIE GEHEIME ZENTRALE: Agenten, Konten, alle 5 Missionen mit Countdown.
  */
 (function () {
+  let timer = null;
+
   App.register("zentrale", {
     render(root, app) {
+      const done = Store.allSolved();
+      const digits = Store.digits();
+
       root.innerHTML = `
         <div class="panel">
           <div class="status-bar">
@@ -14,40 +18,93 @@
 
           <h1 class="title">
             <span class="big glitch" data-text="ZENTRALE">ZENTRALE</span>
-            <span class="small" style="color: var(--cyan)">Du bist drin, Agent!</span>
+            <span class="small cyan">${done ? "Alle Missionen erfüllt!" : "Willkommen zurück, Agenten!"}</span>
           </h1>
 
-          <p class="lead center" id="lead"></p>
+          ${done ? `
+            <div class="banner-win">
+              <strong>MISSION ERFÜLLT! 🏆</strong>
+              Ihr seid echte TEMU-Agenten. Macht jetzt eure Wunschliste fertig und schickt sie an ${UI.esc(CONFIG.uncle)}!
+            </div>` : ""}
 
-          <div class="agent-grid">
-            <div class="stat">
-              <span class="label">AGENTEN-STATUS</span>
-              <span class="value ok">AKTIV</span>
-            </div>
-            <div class="stat">
-              <span class="label">GELÖSTE RÄTSEL</span>
-              <span class="value">${app.state.solved.length}</span>
-            </div>
+          <div class="agents">
+            ${CONFIG.kids.map((k) => {
+              const d = Store.kid(k.id);
+              return `
+                <button class="agent-card" type="button" data-kid="${k.id}">
+                  <span class="agent-avatar" aria-hidden="true">${UI.esc(d.avatar || "🕵️")}</span>
+                  <span class="agent-info">
+                    <span class="agent-name">${UI.esc(Store.kidLabel(k.id))}</span>
+                    <span class="agent-money">${UI.chf(d.money)}</span>
+                    <span class="agent-link">Profil &amp; Wunschliste ▶</span>
+                  </span>
+                </button>`;
+            }).join("")}
           </div>
 
-          <div class="mission-slot">
-            <span class="label">&gt; NÄCHSTE MISSION</span>
-            <h2 class="slot-title">STRENG GEHEIM</h2>
-            <p>Wird gerade vorbereitet<span class="loader-dots"></span></p>
+          <div>
+            <span class="label">&gt; MISSIONEN</span>
+            <ol class="missions" id="missions"></ol>
           </div>
 
-          <button class="btn ghost" id="logout" type="button">&lt; Zurück zum Login</button>
+          ${digits.length ? `
+            <div class="evidence">
+              <span class="label">&gt; BEWEIS-ZIFFERN (gut merken!)</span>
+              <div class="evidence-row">
+                ${digits.map((x) => `<span class="evidence-item"><small>M${x.n}</small>${x.digit}</span>`).join("")}
+              </div>
+            </div>` : ""}
         </div>`;
 
-      FX.typeText(
-        root.querySelector("#lead"),
-        "Super gemacht! Warte hier auf deinen nächsten Auftrag. Nicht weitersagen!"
-      );
+      const list = root.querySelector("#missions");
 
-      root.querySelector("#logout").addEventListener("click", () => {
-        Sound.play("click");
-        app.go("login");
-      });
+      function drawMissions() {
+        list.innerHTML = CONFIG.phases.map((p) => {
+          const st = Store.status(p.n);
+          let right = "";
+          if (st.kind === "solved") right = `<span class="pill ok">✔ +${UI.chf(CONFIG.prizePerPhase)}</span>`;
+          else if (st.kind === "open") right = `<button class="btn small" type="button" data-play="${p.n}">Starten ▶</button>`;
+          else if (st.kind === "waiting") right = `<span class="pill wait">🔒 ${UI.countdown(st.opensAt - Date.now())}</span>`;
+          else right = `<span class="pill lock">🔒 gesperrt</span>`;
+          const title = st.kind === "locked" ? "??? STRENG GEHEIM ???" : p.title;
+          return `
+            <li class="mission mission-${st.kind}">
+              <span class="mission-num">${p.n}</span>
+              <span class="mission-title">${UI.esc(title)}
+                ${st.kind === "waiting" ? `<small>öffnet ${UI.dateTime(st.opensAt)}</small>` : ""}
+              </span>
+              ${right}
+            </li>`;
+        }).join("");
+        list.querySelectorAll("[data-play]").forEach((b) =>
+          b.addEventListener("click", () => {
+            Sound.play("click");
+            app.go(CONFIG.phases[Number(b.dataset.play) - 1].screen);
+          })
+        );
+      }
+
+      drawMissions();
+
+      // Countdown jede Sekunde neu zeichnen; wenn eine Mission aufgeht: Ton
+      let lastOpen = CONFIG.phases.filter((p) => Store.status(p.n).kind === "open").length;
+      timer = setInterval(() => {
+        const open = CONFIG.phases.filter((p) => Store.status(p.n).kind === "open").length;
+        if (open > lastOpen) { Sound.play("unlock"); FX.burst(50); }
+        lastOpen = open;
+        if (list.querySelector(".pill.wait")) drawMissions();
+      }, 1000);
+
+      root.querySelectorAll("[data-kid]").forEach((b) =>
+        b.addEventListener("click", () => {
+          Sound.play("click");
+          app.go("profil", { kid: b.dataset.kid });
+        })
+      );
+    },
+
+    leave() {
+      clearInterval(timer);
     },
   });
 })();

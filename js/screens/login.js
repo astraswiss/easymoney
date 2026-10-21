@@ -1,16 +1,13 @@
 /*
- * SCHRITT 1: Das geheime Passwort.
+ * MISSION 1: Das geheime Passwort.
  * Das Passwort steht auf einem Zettel, der bei Baci Bardh zu Hause versteckt ist.
- * Texte und Passwort stehen oben in CONFIG und lassen sich leicht ändern.
  */
 (function () {
-  const CONFIG = {
+  const PHASE = {
     mission: "Das Passwort steht auf einem geheimen Zettel. Der Zettel ist bei Baci Bardh zu Hause versteckt. Findet ihn!",
     answer: "lisaleosindnichtschlau", // Groß/Klein und Leerzeichen sind egal
-    wrongText: "FALSCH! 😂 Versuch es noch einmal. Baci Bardh glaubt nicht an dich!",
     hintAfter: 3, // nach so vielen Fehlversuchen kommt ein Tipp
     hintText: "TIPP: Schreibt genau ab, was auf dem Zettel steht. Leerzeichen sind egal.",
-    next: "zentrale", // dieser Screen kommt nach dem richtigen Passwort
   };
 
   const LOCK_SVG = `
@@ -21,11 +18,9 @@
       <rect x="35" y="62" width="6" height="14" rx="2" fill="currentColor"/>
     </svg>`;
 
-  let attempts = 0;
-
   App.register("login", {
     render(root, app) {
-      attempts = 0;
+      let attempts = 0;
       root.innerHTML = `
         <div class="panel">
           <div class="status-bar">
@@ -44,7 +39,7 @@
 
           <div class="riddle">
             <span class="label">&gt; GEHEIMER AUFTRAG</span>
-            <p>${CONFIG.mission}</p>
+            <p>${PHASE.mission}</p>
           </div>
 
           <form class="answer-form" id="login-form" autocomplete="off" novalidate>
@@ -76,9 +71,7 @@
       input.addEventListener("keydown", (e) => {
         if (e.key.length === 1) Sound.play("key");
       });
-      input.addEventListener("input", () => {
-        input.classList.remove("wrong");
-      });
+      input.addEventListener("input", () => input.classList.remove("wrong"));
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -92,22 +85,17 @@
           return;
         }
 
-        if (guess === CONFIG.answer) {
+        if (guess === PHASE.answer) {
           success();
           return;
         }
 
         attempts++;
-        Sound.play("error");
-        feedback.className = "feedback wrong";
-        feedback.textContent = CONFIG.wrongText;
         input.classList.add("wrong");
-        FX.replayClass(panel, "shake");
-        FX.replayClass(panel, "flash-red");
-        FX.replayClass(feedback, "shake");
-        if (attempts >= CONFIG.hintAfter) {
+        UI.wrong(panel, feedback);
+        if (attempts >= PHASE.hintAfter) {
           hint.hidden = false;
-          hint.textContent = CONFIG.hintText;
+          hint.textContent = PHASE.hintText;
         }
         input.select();
       });
@@ -120,60 +108,21 @@
         feedback.textContent = "";
         hint.hidden = true;
         lock.classList.add("open");
-        root.querySelector(".state").classList.add("ok");
-        root.querySelector(".state").lastChild.textContent = "ENTSPERRT";
+        const state = root.querySelector(".state");
+        state.classList.add("ok");
+        state.lastChild.textContent = "ENTSPERRT";
         Sound.play("unlock");
-        app.markSolved("login");
         await FX.wait(600);
-        showGranted(app);
+        UI.completeMission(1, app, {
+          title: "ZUGANG ERLAUBT!",
+          sub: "Willkommen in der geheimen Zentrale!",
+          lines: ["> Firewall wird umgangen ... OK", "> Tür zur Zentrale ... OFFEN"],
+          button: "Zentrale betreten ▶",
+          next: Store.state.setupDone ? "zentrale" : "setup",
+        });
       }
 
       setTimeout(() => input.focus({ preventScroll: true }), 400);
     },
   });
-
-  /* Die coole Erfolgs-Animation */
-  async function showGranted(app) {
-    const overlay = document.createElement("div");
-    overlay.className = "granted";
-    overlay.setAttribute("role", "dialog");
-    overlay.setAttribute("aria-label", "Zugang erlaubt");
-    overlay.innerHTML = `
-      <div class="granted-box">
-        <h2 class="granted-title glitch" data-text="ZUGANG ERLAUBT!">ZUGANG ERLAUBT!</h2>
-        <p class="granted-sub">Willkommen in der geheimen Zentrale!</p>
-        <pre class="terminal" id="terminal"></pre>
-        <div class="progress" aria-hidden="true"><span id="bar"></span></div>
-        <button class="btn go" id="enter" type="button" hidden>Zentrale betreten ▶</button>
-      </div>`;
-    document.body.appendChild(overlay);
-    Sound.play("success");
-    FX.burst();
-
-    const term = overlay.querySelector("#terminal");
-    const bar = overlay.querySelector("#bar");
-    const lines = [
-      "> Passwort ... RICHTIG ✔",
-      "> Firewall wird umgangen ... OK",
-      "> Agenten-Ausweis wird gedruckt ... OK",
-      "> Tür zur Zentrale ... OFFEN",
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const row = document.createElement("div");
-      term.appendChild(row);
-      await FX.typeText(row, lines[i], 22);
-      bar.style.width = ((i + 1) / lines.length) * 100 + "%";
-      Sound.play("blip");
-      await FX.wait(200);
-    }
-
-    const enter = overlay.querySelector("#enter");
-    enter.hidden = false;
-    enter.focus();
-    enter.addEventListener("click", () => {
-      Sound.play("click");
-      overlay.remove();
-      app.go(CONFIG.next);
-    });
-  }
 })();

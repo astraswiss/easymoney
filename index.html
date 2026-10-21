@@ -18,19 +18,29 @@
   <div class="scanlines" aria-hidden="true"></div>
 
   <header class="topbar">
-    <div class="brand"><span class="brand-temu">TEMU</span><span class="brand-quest">QUEST</span></div>
+    <div class="brand" role="button" aria-label="TEMU QUEST"><span class="brand-temu">TEMU</span><span class="brand-quest">QUEST</span></div>
     <button id="sound-toggle" class="chip" type="button" aria-pressed="true">TON: AN</button>
   </header>
 
   <!-- Hier werden die Seiten (Screens) hineingesetzt -->
   <main id="app"></main>
 
+  <script src="js/config.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/fx.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
   <script src="js/app.js"></script>
-  <!-- Jeder Spielschritt ist eine eigene Datei in js/screens/ -->
+  <!-- Jeder Screen ist eine eigene Datei in js/screens/ -->
   <script src="js/screens/login.js"></script>
+  <script src="js/screens/setup.js"></script>
   <script src="js/screens/zentrale.js"></script>
-  <script>App.start("login");</script>
+  <script src="js/screens/profil.js"></script>
+  <script src="js/screens/phase2.js"></script>
+  <script src="js/screens/phase3.js"></script>
+  <script src="js/screens/phase4.js"></script>
+  <script src="js/screens/phase5.js"></script>
+  <script src="js/screens/admin.js"></script>
+  <script>App.start();</script>
 </body>
 </html>

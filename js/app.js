@@ -4,12 +4,12 @@
  * Jeder Spielschritt ist ein "Screen". Ein Screen wird so angemeldet:
  *
  *   App.register("name", {
- *     render(root, app) { ... HTML in root bauen, Knöpfe verbinden ... },
- *     leave()           { ... optional: aufräumen ... },
+ *     render(root, app, params) { ... HTML in root bauen, Knöpfe verbinden ... },
+ *     leave()                   { ... optional: aufräumen (Timer stoppen) ... },
  *   });
  *
- * Zum nächsten Screen wechseln:  App.go("name")
- * Gemeinsame Spieldaten (z. B. gelöste Rätsel): App.state
+ * Zu einem Screen wechseln:  App.go("name", { ...params })
+ * Der Spielstand liegt in Store (js/store.js), die Einstellungen in CONFIG (js/config.js).
  */
 (function () {
   const screens = {};
@@ -17,23 +17,19 @@
   let root = null;
 
   const App = {
-    state: {
-      solved: [], // Namen der gelösten Schritte, z. B. ["login"]
-    },
-
     register(name, screen) {
       screens[name] = screen;
     },
 
-    async go(name) {
+    async go(name, params = {}) {
       const next = screens[name];
       if (!next) {
         console.warn("Diesen Screen gibt es nicht:", name);
         return;
       }
+      if (current && screens[current].leave) screens[current].leave();
       const old = root.firstElementChild;
       if (old) {
-        if (current && screens[current].leave) screens[current].leave();
         old.classList.add("leaving");
         Sound.play("whoosh");
         await FX.wait(330);
@@ -43,12 +39,15 @@
       const el = document.createElement("section");
       el.className = "screen screen-" + name;
       root.appendChild(el);
-      next.render(el, App);
+      next.render(el, App, params);
       window.scrollTo({ top: 0 });
     },
 
-    markSolved(name) {
-      if (!App.state.solved.includes(name)) App.state.solved.push(name);
+    // Wohin beim Öffnen der Seite?
+    home() {
+      if (!Store.state.phases[1].solvedAt) return "login";
+      if (!Store.state.setupDone) return "setup";
+      return "zentrale";
     },
 
     // Text vergleichen: Groß/Klein und Leerzeichen sind egal
@@ -56,7 +55,7 @@
       return String(text).toLowerCase().replace(/\s+/g, "");
     },
 
-    start(first) {
+    start() {
       root = document.getElementById("app");
       FX.startMatrix(document.getElementById("matrix"));
 
@@ -68,7 +67,15 @@
         Sound.play("blip");
       });
 
-      App.go(first);
+      // Geheimer Admin-Zugang: 5× schnell auf das Logo tippen (oder Link mit #admin)
+      let taps = [];
+      document.querySelector(".brand").addEventListener("click", () => {
+        const now = Date.now();
+        taps = taps.filter((t) => now - t < 2500).concat(now);
+        if (taps.length >= 5) { taps = []; App.go("admin-login"); }
+      });
+
+      App.go(location.hash === "#admin" ? "admin-login" : App.home());
     },
   };
 

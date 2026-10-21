@@ -47,12 +47,18 @@
     unlock:  () => { tone(200, 0, 0.12, "square", 0.08, 800); tone(1200, 0.12, 0.08, "square", 0.06); },
     blip:    () => tone(1200, 0, 0.05, "sine", 0.06),
     whoosh:  () => tone(120, 0, 0.35, "sawtooth", 0.05, 1200),
+    coin:    () => { tone(988, 0, 0.08, "square", 0.06); tone(1319, 0.08, 0.3, "square", 0.06); },
   };
 
   window.Sound = {
     play(name) {
       if (!enabled || !EFFECTS[name]) return;
       try { EFFECTS[name](); } catch (e) { /* Ton ist nicht wichtig */ }
+    },
+    // Ein Ton mit bestimmter Höhe (für das Laser-Gedächtnis)
+    note(freq, dur = 0.3) {
+      if (!enabled) return;
+      try { tone(freq, 0, dur, "triangle", 0.12); } catch (e) { /* egal */ }
     },
     get enabled() { return enabled; },
     toggle() {
