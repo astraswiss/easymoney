@@ -94,6 +94,7 @@ window.CONFIG = {
       bonus: 0,
       wishes: [
         { name: "Squishy", url: "https://share.temu.com/V7KNscqYGrB", price: 4.84, ordered: false },
+        { name: "Idk", url: "https://share.temu.com/cPDnIF9ctqB", price: 2.87, ordered: false },
       ],
     },
     {
