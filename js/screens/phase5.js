@@ -40,7 +40,8 @@
             Sound.play("unlock");
             root.querySelectorAll(".key").forEach((k) => (k.disabled = true));
             setTimeout(() => {
-              const total = CONFIG.kids.map((k) => `> ${Store.kidLabel(k.id)}: ${UI.chf(Store.kid(k.id).money + CONFIG.prizePerPhase)}`);
+              Game.solve(PHASE.n);
+              const total = CONFIG.kids.map((k) => `> ${k.agent}: ${UI.chf(Game.money(k.id))}`);
               UI.completeMission(PHASE.n, app, {
                 title: "MISSION ERFÜLLT!",
                 sub: "Ihr seid echte TEMU-Agenten! 🏆",

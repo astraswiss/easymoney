@@ -118,7 +118,6 @@
           sub: "Willkommen in der geheimen Zentrale!",
           lines: ["> Firewall wird umgangen ... OK", "> Tür zur Zentrale ... OFFEN"],
           button: "Zentrale betreten ▶",
-          next: Store.state.setupDone ? "zentrale" : "setup",
         });
       }
 

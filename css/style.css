@@ -465,10 +465,6 @@ body {
 }
 .text-input:focus { outline: none; border-color: var(--cyan); box-shadow: 0 0 10px rgba(46, 242, 255, 0.35); }
 .field-label { font-weight: 700; font-size: 1rem; color: var(--muted); }
-.link-btn {
-  background: none; border: 0; padding: 0; cursor: pointer;
-  font: inherit; font-size: 1rem; color: var(--cyan); text-decoration: underline; text-align: left;
-}
 .icon-btn {
   flex: none;
   width: 34px; height: 34px;
@@ -480,33 +476,6 @@ body {
   font-size: 1rem;
 }
 .icon-btn:hover { color: var(--red); border-color: var(--red); }
-
-/* ---------- Ausweis ---------- */
-.setup-form { display: flex; flex-direction: column; gap: 16px; }
-.id-card {
-  margin: 0;
-  border: 1px solid var(--cyan);
-  border-radius: 6px;
-  padding: 12px 14px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-}
-.id-card legend { padding: 0 6px; }
-.avatar-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
-.avatar-opt { position: relative; cursor: pointer; }
-.avatar-opt input { position: absolute; opacity: 0; }
-.avatar-opt span {
-  display: grid; place-items: center;
-  aspect-ratio: 1; max-width: 100%;
-  font-size: 1.6rem;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  transition: transform 0.1s;
-}
-.avatar-opt input:checked + span { border-color: var(--pink); box-shadow: 0 0 12px rgba(255, 62, 165, 0.7); transform: scale(1.08); }
-.avatar-opt input:focus-visible + span { outline: 2px solid var(--cyan); }
 
 /* ---------- Zentrale ---------- */
 .banner-win {
@@ -561,7 +530,6 @@ body {
 .mission-open { border-color: var(--pink); box-shadow: 0 0 14px rgba(255, 62, 165, 0.25); }
 .mission-open .mission-num { color: var(--pink); }
 .mission-solved .mission-num { color: var(--green); }
-.mission-locked .mission-title { color: var(--muted); }
 
 .evidence-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
 .evidence-item {
@@ -666,7 +634,7 @@ body {
 .cart-sum { text-align: center; font-size: 1.2rem; }
 .cart-sum strong { font-family: var(--font-display); font-weight: 400; color: var(--cyan); }
 
-/* ---------- Mission 5 + Admin: Tastatur ---------- */
+/* ---------- Mission 5: Tastatur ---------- */
 .pin-display { display: flex; justify-content: center; gap: 10px; margin-bottom: 12px; }
 .pin-slot {
   width: 48px; height: 58px;
@@ -703,20 +671,6 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .vault.open .vault-door { border-color: var(--green); transform: rotateY(-75deg); box-shadow: 0 0 30px var(--green); }
-
-/* ---------- Admin ---------- */
-.admin-sec { display: flex; flex-direction: column; gap: 8px; }
-.admin-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.admin-row {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
-  border: 1px solid var(--line); border-radius: 4px;
-  padding: 8px 10px;
-}
-.admin-row > span:first-child { display: flex; flex-direction: column; min-width: 0; flex: 1 1 180px; }
-.admin-row small { color: var(--muted); }
-.admin-kid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
-.confirm { border: 1px solid var(--red); border-radius: 6px; padding: 10px 12px; }
-.confirm p { margin: 0 0 8px; }
 
 .center { text-align: center; }
 .sr-only {

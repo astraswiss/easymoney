@@ -106,14 +106,17 @@
 
   // Standard-Abschluss einer Mission: speichern + Belohnung zeigen + zur Zentrale
   function completeMission(n, app, extra = {}) {
-    Store.solve(n);
+    Game.solve(n);
     const p = CONFIG.phases[n - 1];
+    const nextPhase = CONFIG.phases[n];
     const lines = [
       `> Mission ${n} ... GESCHAFFT ✔`,
       `> Belohnung: ${chf(CONFIG.prizePerPhase)} für jeden Agenten`,
     ];
     if (p.digit !== null) lines.push(`> Beweis-Ziffer gefunden: ${p.digit}`);
-    if (n < CONFIG.phases.length) lines.push(`> Nächste Mission in ${CONFIG.unlockHours} Stunden`);
+    if (nextPhase && Game.opensAt(nextPhase.n) > Date.now()) {
+      lines.push(`> Nächste Mission: ${dateTime(Game.opensAt(nextPhase.n))}`);
+    }
     reward({
       title: extra.title || "GESCHAFFT!",
       sub: extra.sub || "Super Arbeit, Agenten!",
@@ -124,7 +127,7 @@
   }
 
   /*
-   * Zahlen-Tastatur (für Tresor und Admin-PIN).
+   * Zahlen-Tastatur (für den Tresor).
    * UI.keypad(container, { length, onSubmit(code, api) })
    * api.clear() leert die Anzeige, api.fail() wackelt.
    */

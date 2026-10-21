@@ -6,8 +6,8 @@
 
   App.register("zentrale", {
     render(root, app) {
-      const done = Store.allSolved();
-      const digits = Store.digits();
+      const done = Game.allSolved();
+      const digits = Game.digits();
 
       root.innerHTML = `
         <div class="panel">
@@ -29,13 +29,12 @@
 
           <div class="agents">
             ${CONFIG.kids.map((k) => {
-              const d = Store.kid(k.id);
               return `
                 <button class="agent-card" type="button" data-kid="${k.id}">
-                  <span class="agent-avatar" aria-hidden="true">${UI.esc(d.avatar || "🕵️")}</span>
+                  <span class="agent-avatar" aria-hidden="true">${UI.esc(k.avatar || "🕵️")}</span>
                   <span class="agent-info">
-                    <span class="agent-name">${UI.esc(Store.kidLabel(k.id))}</span>
-                    <span class="agent-money">${UI.chf(d.money)}</span>
+                    <span class="agent-name">${UI.esc(k.agent)}</span>
+                    <span class="agent-money">${UI.chf(Game.money(k.id))}</span>
                     <span class="agent-link">Profil &amp; Wunschliste ▶</span>
                   </span>
                 </button>`;
@@ -60,13 +59,12 @@
 
       function drawMissions() {
         list.innerHTML = CONFIG.phases.map((p) => {
-          const st = Store.status(p.n);
+          const st = Game.status(p.n);
           let right = "";
           if (st.kind === "solved") right = `<span class="pill ok">✔ +${UI.chf(CONFIG.prizePerPhase)}</span>`;
           else if (st.kind === "open") right = `<button class="btn small" type="button" data-play="${p.n}">Starten ▶</button>`;
-          else if (st.kind === "waiting") right = `<span class="pill wait">🔒 ${UI.countdown(st.opensAt - Date.now())}</span>`;
-          else right = `<span class="pill lock">🔒 gesperrt</span>`;
-          const title = st.kind === "locked" ? "??? STRENG GEHEIM ???" : p.title;
+          else right = `<span class="pill wait">🔒 ${UI.countdown(st.opensAt - Date.now())}</span>`;
+          const title = st.kind === "waiting" ? "??? STRENG GEHEIM ???" : p.title;
           return `
             <li class="mission mission-${st.kind}">
               <span class="mission-num">${p.n}</span>
@@ -87,9 +85,9 @@
       drawMissions();
 
       // Countdown jede Sekunde neu zeichnen; wenn eine Mission aufgeht: Ton
-      let lastOpen = CONFIG.phases.filter((p) => Store.status(p.n).kind === "open").length;
+      let lastOpen = CONFIG.phases.filter((p) => Game.status(p.n).kind === "open").length;
       timer = setInterval(() => {
-        const open = CONFIG.phases.filter((p) => Store.status(p.n).kind === "open").length;
+        const open = CONFIG.phases.filter((p) => Game.status(p.n).kind === "open").length;
         if (open > lastOpen) { Sound.play("unlock"); FX.burst(50); }
         lastOpen = open;
         if (list.querySelector(".pill.wait")) drawMissions();

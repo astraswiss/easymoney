@@ -9,7 +9,7 @@
  *   });
  *
  * Zu einem Screen wechseln:  App.go("name", { ...params })
- * Der Spielstand liegt in Store (js/store.js), die Einstellungen in CONFIG (js/config.js).
+ * Einstellungen und Spielstand stehen in CONFIG (js/config.js), Hilfen dazu in Game (js/game.js).
  */
 (function () {
   const screens = {};
@@ -45,9 +45,7 @@
 
     // Wohin beim Öffnen der Seite?
     home() {
-      if (!Store.state.phases[1].solvedAt) return "login";
-      if (!Store.state.setupDone) return "setup";
-      return "zentrale";
+      return Game.isSolved(1) ? "zentrale" : "login";
     },
 
     // Text vergleichen: Groß/Klein und Leerzeichen sind egal
@@ -67,15 +65,7 @@
         Sound.play("blip");
       });
 
-      // Geheimer Admin-Zugang: 5× schnell auf das Logo tippen (oder Link mit #admin)
-      let taps = [];
-      document.querySelector(".brand").addEventListener("click", () => {
-        const now = Date.now();
-        taps = taps.filter((t) => now - t < 2500).concat(now);
-        if (taps.length >= 5) { taps = []; App.go("admin-login"); }
-      });
-
-      App.go(location.hash === "#admin" ? "admin-login" : App.home());
+      App.go(App.home());
     },
   };
 
