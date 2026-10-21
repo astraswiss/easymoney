@@ -138,7 +138,7 @@
   function missionReport(n) {
     const p = CONFIG.phases[n - 1];
     return [
-      `TEMU QUEST 🕵️ Mission ${n} „${p.title}“ GESCHAFFT!`,
+      `TEMU QUEST ✅ Mission ${n} „${p.title}“ GESCHAFFT!`,
       `Erfolgs-Code: ${p.proof}`,
       `Gelöst: ${dateTime(Game.solvedAt(n) || Date.now())}`,
       `Agenten: ${CONFIG.kids.map((k) => k.agent).join(" und ")}`,
