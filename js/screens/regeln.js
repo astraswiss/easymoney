@@ -68,6 +68,13 @@
               <p>Ihr dürft nur so viel aussuchen, wie auf eurem Konto ist. Neue Wünsche verschwinden, wenn ihr die Seite schließt, also schickt sie gleich!</p>
             </section>
 
+            <section class="rule rule-money">
+              <h2><span aria-hidden="true">⚡</span> Überraschungen</h2>
+              <p>An manchen Tagen gibt es ein <b>Überraschungs-Spiel</b>. Es ist nur für kurze Zeit offen, zum Beispiel <b>von 18:00 bis 20:00 Uhr</b>. Ihr seht es oben in der Zentrale.</p>
+              <p>Wer es schafft, bekommt <b>Fr. 10.– extra für jeden</b>. Um 20:00 Uhr ist Schluss: Wer dann nicht fertig ist, bekommt nichts!</p>
+              <p>Auch hier gilt: Nachricht an ${UI.esc(CONFIG.uncle)} schicken!</p>
+            </section>
+
             <section class="rule">
               <h2><span aria-hidden="true">🏋️</span> Trainingslager</h2>
               <p>In der Zentrale gibt es <b>Bonus-Spiele</b>. Die sind immer offen und ihr könnt sie so oft spielen, wie ihr wollt. Dort gibt es <b>kein Geld</b>, nur Punkte und Rekorde.</p>

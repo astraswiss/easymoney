@@ -104,12 +104,14 @@
 
       drawMissions();
 
-      // Überraschungen: nur sichtbar, solange sie nicht verpasst sind
+      // Überraschungen: nur die von heute (und offene / noch nicht gemeldete)
       const eventsEl = root.querySelector("#events");
+      const isToday = (ev) => new Date(ev.opens).toDateString() === new Date().toDateString();
       function drawEvents() {
         eventsEl.innerHTML = CONFIG.events.map((ev) => {
           const st = Game.eventStatus(ev.id);
           if (st.kind === "missed") return "";
+          if (st.kind !== "open" && !Game.eventSolvedOnlyNow(ev.id) && !isToday(ev)) return "";
           let action = "";
           if (st.kind === "waiting") action = `<span class="pill wait">🔒 öffnet in ${UI.countdown(st.opensAt - Date.now())}</span>`;
           else if (st.kind === "open") action = `<button class="btn go" type="button" data-event="${ev.id}">Jetzt spielen ▶</button><small>Noch ${UI.countdown(st.closesAt - Date.now())} offen!</small>`;
@@ -119,7 +121,7 @@
             <div class="surprise surprise-${st.kind}">
               <span class="surprise-tag">⚡ ÜBERRASCHUNG ⚡</span>
               <strong>${UI.esc(ev.title)}</strong>
-              <p>Nur heute von <b>${new Date(ev.opens).getHours()}:00 bis ${new Date(ev.closes).getHours()}:00 Uhr</b>! Wer es schafft, bekommt <b>${UI.chf(ev.prize)} EXTRA</b> – für jeden von euch!</p>
+              <p>Nur heute von <b>${new Date(ev.opens).getHours()}:00 bis ${new Date(ev.closes).getHours()}:00 Uhr</b>! Wer es schafft, bekommt <b>${UI.chf(ev.prize)} EXTRA</b> – für jeden von euch! Um ${new Date(ev.closes).getHours()}:00 Uhr ist Schluss: Wer dann nicht fertig ist, bekommt nichts.</p>
               ${action}
             </div>`;
         }).join("");

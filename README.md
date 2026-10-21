@@ -27,11 +27,20 @@ Dann sind alle Missionen sofort offen.
    Agenten-Memory, Finde den Spion, Laser-Abwehr. Ein neues Spiel: Datei in `js/screens/train-…js`
    mit `Training.add({...})` anlegen und in `index.html` einbinden.
 
+6. **Überraschungen** (`events` in `js/config.js`): nur in einem Zeitfenster spielbar, +Fr. 10.– pro Kind.
+   Um die Schluss-Zeit wird das Spiel abgebrochen, auch mitten im Spiel.
+   - 21.10. 16–20 Uhr: Der Doppelagent (ZEBRA-21)
+   - 22.10. 18–20 Uhr: Der Blitz-Rechner (PANTHER-38)
+   - 23.10. 18–20 Uhr: Das Foto-Gedächtnis (HAI-54)
+   - 24.10. 18–20 Uhr: Der Bomben-Entschärfer (ADLER-76)
+   - 25.10. 18–20 Uhr: Das Agenten-Sudoku (WOLF-91)
+
 ## Was man in `js/config.js` ändert
 
 | Was | Wo |
 | --- | --- |
 | Mission geschafft | Nummer in `solved` eintragen, z. B. `solved: [1, 2]` |
+| Überraschung geschafft | `solved: true` beim Event |
 | Wann eine Mission öffnet | `opens` bei der Mission, z. B. `"2026-10-22T16:00"` |
 | Geld pro Mission | `prizePerPhase` |
 | Extra-Geld / Abzug | `bonus` beim Kind |

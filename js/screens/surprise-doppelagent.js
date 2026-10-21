@@ -51,29 +51,10 @@
 
   App.register("surprise-doppelagent", {
     render(root, app) {
-      const ev = Game.event(EVENT_ID);
-      const st = Game.eventStatus(EVENT_ID);
+      if (!Events.guard(root, app, EVENT_ID)) return;
 
-      if (st.kind !== "open") {
-        root.innerHTML = `
-          <div class="panel">
-            <h1 class="title"><span class="mid">${UI.esc(ev.title.toUpperCase())}</span></h1>
-            <p class="lead center">${st.kind === "solved" ? "Die habt ihr schon geschafft! 🏆" : "Diese Überraschung ist gerade nicht offen."}</p>
-            <button class="btn ghost" data-back type="button">&lt; Zurück zur Zentrale</button>
-          </div>`;
-        UI.bindBack(root, app);
-        return;
-      }
-
-      root.innerHTML = `
-        <div class="panel">
-          <div class="status-bar">
-            <span class="state ok"><span class="blink-dot"></span>⚡ ÜBERRASCHUNG</span>
-            <span>+${UI.chf(ev.prize)} FÜR JEDEN</span>
-          </div>
-          <h1 class="title"><span class="mid glitch" data-text="DER DOPPELAGENT">DER DOPPELAGENT</span></h1>
-          <p class="lead center" id="lead"></p>
-
+      root.innerHTML = Events.frame(EVENT_ID,
+        "Ein Doppelagent will euch verwirren! 3 Stufen. Ein Fehler, und ihr fangt die Stufe von vorne an. 😈", `
           <p class="da-stage" id="stage"></p>
           <div class="task-box"><span class="label">&gt; REGEL</span><p id="rule"></p></div>
 
@@ -104,12 +85,8 @@
 
           <button class="btn go" type="button" id="start">Stufe starten ▶</button>
           <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
-          <button class="btn ghost" data-back type="button">&lt; Zurück zur Zentrale</button>
-        </div>`;
+      `);
       UI.bindBack(root, app);
-
-      FX.typeText(root.querySelector("#lead"),
-        "Ein Doppelagent will euch verwirren! 3 Stufen. Ein Fehler, und ihr fangt die Stufe von vorne an. 😈");
 
       const $ = (s) => root.querySelector(s);
       const panel = $(".panel");
@@ -225,10 +202,12 @@
       };
       document.addEventListener("keydown", keyHandler);
 
+      Events.watch(EVENT_ID, root, app, () => { active = false; clearTimeout(timeout); });
       showStage();
     },
 
     leave() {
+      Events.stop();
       clearTimeout(timeout);
       if (keyHandler) document.removeEventListener("keydown", keyHandler);
     },

@@ -690,6 +690,50 @@ body {
 }
 .da-dir:active { background: var(--cyan); color: #000; }
 
+.photo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: min(100%, 340px); margin: 0 auto; }
+.photo-cell {
+  aspect-ratio: 1; max-width: 100%;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: rgba(46, 242, 255, 0.05);
+  cursor: pointer;
+}
+.photo-cell.lit { background: var(--cyan); box-shadow: 0 0 16px var(--cyan); }
+.photo-cell.hit { background: var(--green); box-shadow: 0 0 10px var(--green); }
+.photo-cell.miss { background: var(--red); }
+.photo-cell.show { outline: 3px dashed var(--orange); outline-offset: -4px; }
+
+.bomb-box {
+  display: flex; flex-direction: column; gap: 10px;
+  background: #1a1410;
+  border: 3px solid #555;
+  border-radius: 10px;
+  padding: 14px 12px;
+}
+.wire {
+  display: flex; align-items: center; gap: 10px;
+  background: none; border: 0; padding: 6px 0; cursor: pointer;
+  color: var(--fg);
+}
+.wire-num { font-family: var(--font-display); width: 1.4em; }
+.wire-line { flex: 1; height: 12px; border-radius: 6px; background: var(--w); box-shadow: 0 0 8px var(--w); }
+.wire.cut .wire-line { background: linear-gradient(90deg, var(--w) 45%, transparent 45% 55%, var(--w) 55%); box-shadow: none; }
+
+.sudoku {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  width: min(100%, 300px); margin: 0 auto;
+  border: 3px solid var(--cyan); border-radius: 6px; overflow: hidden;
+}
+.sd-cell {
+  aspect-ratio: 1; max-width: 100%;
+  font-family: var(--font-display); font-size: 1.8rem;
+  color: var(--pink); background: #000;
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.sd-cell.fixed { color: var(--fg); background: rgba(46, 242, 255, 0.12); cursor: default; }
+.sd-cell:nth-child(4n + 2) { border-right: 3px solid var(--cyan); }
+.sd-cell:nth-child(n + 5):nth-child(-n + 8) { border-bottom: 3px solid var(--cyan); }
+
 /* ---------- Trainingslager ---------- */
 .train-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin-top: 6px; }
 .train-card {

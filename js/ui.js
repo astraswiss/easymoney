@@ -157,11 +157,13 @@
   }
 
   function completeEvent(id, app) {
+    if (Game.eventStatus(id).kind === "missed") return; // nach Schluss gibt es nichts mehr
+    Events.stop();
     Game.solveEvent(id);
     const ev = Game.event(id);
     reward({
       title: "ÜBERRASCHUNG GESCHAFFT!",
-      sub: "Wow, ihr habt den Doppelagenten besiegt!",
+      sub: `Wow, ihr habt „${ev.title}“ geschafft!`,
       lines: [
         `> ${ev.title} ... GESCHAFFT ✔`,
         `> +${chf(ev.prize)} EXTRA auf das Konto von jedem Agenten`,
