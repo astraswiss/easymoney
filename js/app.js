@@ -65,6 +65,8 @@
         Sound.play("blip");
       });
 
+      if (Game.testMode) document.querySelector(".brand").insertAdjacentHTML("beforeend", ' <span class="test-badge">TEST</span>');
+
       App.go(App.home());
     },
   };

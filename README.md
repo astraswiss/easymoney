@@ -8,6 +8,9 @@ Das ganze Spiel wird in `js/config.js` gesteuert.
 
 `index.html` im Browser öffnen (Doppelklick reicht).
 
+**Zum Ausprobieren:** `index.html#test` öffnen (oder den Link mit `#test` am Ende).
+Dann sind alle Missionen sofort offen.
+
 ## So läuft das Spiel
 
 1. **Mission 1 – Das geheime Passwort**: Das Passwort steht auf einem Zettel bei Baci Bardh zu Hause.

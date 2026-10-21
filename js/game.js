@@ -9,6 +9,9 @@
   CONFIG.kids.forEach((k) => (newWishes[k.id] = []));
 
   const Game = {
+    // Testmodus für Baci Bardh: Link mit #test am Ende → alle Missionen sofort offen
+    testMode: location.hash === "#test",
+
     isSolved(n) {
       return CONFIG.solved.includes(n) || solvedNow.has(n);
     },
@@ -23,7 +26,8 @@
 
     opensAt(n) {
       const p = CONFIG.phases[n - 1];
-      return p.opens ? new Date(p.opens).getTime() : 0;
+      if (Game.testMode || !p.opens) return 0;
+      return new Date(p.opens).getTime();
     },
 
     /*
