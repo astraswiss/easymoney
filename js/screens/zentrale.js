@@ -46,6 +46,17 @@
             <ol class="missions" id="missions"></ol>
           </div>
 
+          <div>
+            <span class="label">&gt; TRAININGSLAGER – Bonus-Spiele, immer offen</span>
+            <div class="train-list">
+              ${Training.games.map((g) => `
+                <button class="train-card" type="button" data-train="${g.screen}">
+                  <span class="train-icon" aria-hidden="true">${g.icon}</span>
+                  <span class="train-info"><b>${UI.esc(g.title)}</b><small>${UI.esc(g.text)}</small></span>
+                </button>`).join("")}
+            </div>
+          </div>
+
           <button class="btn ghost" type="button" id="rules">📜 Spielregeln: Wie funktioniert das Spiel?</button>
 
           ${digits.length ? `
@@ -98,6 +109,13 @@
         lastOpen = open;
         if (list.querySelector(".pill.wait")) drawMissions();
       }, 1000);
+
+      root.querySelectorAll("[data-train]").forEach((b) =>
+        b.addEventListener("click", () => {
+          Sound.play("click");
+          app.go(b.dataset.train);
+        })
+      );
 
       root.querySelector("#rules").addEventListener("click", () => {
         Sound.play("click");

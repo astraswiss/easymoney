@@ -69,6 +69,12 @@
             </section>
 
             <section class="rule">
+              <h2><span aria-hidden="true">🏋️</span> Trainingslager</h2>
+              <p>In der Zentrale gibt es <b>Bonus-Spiele</b>. Die sind immer offen und ihr könnt sie so oft spielen, wie ihr wollt. Dort gibt es <b>kein Geld</b>, nur Punkte und Rekorde.</p>
+              <p>Tipp: Spielt gegeneinander! Wer schafft den höheren Rekord?</p>
+            </section>
+
+            <section class="rule">
               <h2><span aria-hidden="true">❌</span> Falsche Antwort?</h2>
               <p>Kein Problem! Probiert einfach nochmal. Aber Achtung beim Tresor: Nach 3 Fehlern gibt es <b>Alarm</b>!</p>
             </section>

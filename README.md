@@ -23,6 +23,9 @@ Dann sind alle Missionen sofort offen.
    - 5: Der letzte Tresor – Beweis-Ziffern nach 3 Hinweisen ordnen: 9 4 7 2. Nach 3 Fehlern 30 Sekunden Alarm.
 3. Jede Mission bringt **jedem Kind Fr. 10.–** aufs Konto (Total 100 Franken). Bestellt wird alles zusammen am Ende.
 4. Im **Profil** tragen die Kinder Temu-Links mit Preis ein und schicken sie an Baci Bardh.
+5. **Trainingslager** (in der Zentrale): Bonus-Spiele, immer offen, ohne Geld, nur Rekorde:
+   Agenten-Memory, Finde den Spion, Laser-Abwehr. Ein neues Spiel: Datei in `js/screens/train-…js`
+   mit `Training.add({...})` anlegen und in `index.html` einbinden.
 
 ## Was man in `js/config.js` ändert
 

@@ -637,6 +637,104 @@ body {
   color: var(--cyan);
 }
 
+/* ---------- Trainingslager ---------- */
+.train-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; margin-top: 6px; }
+.train-card {
+  display: flex; align-items: center; gap: 12px;
+  text-align: left;
+  font: inherit; color: var(--fg);
+  background: rgba(255, 138, 31, 0.06);
+  border: 1px solid var(--orange);
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  min-width: 0;
+}
+.train-card:hover { box-shadow: 0 0 14px rgba(255, 138, 31, 0.4); }
+.train-card:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.train-icon { font-size: 2rem; line-height: 1; }
+.train-info { display: flex; flex-direction: column; min-width: 0; }
+.train-info small { color: var(--muted); font-size: 0.92rem; line-height: 1.25; }
+
+.memory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: min(100%, 360px); margin: 0 auto; }
+.mem-card {
+  position: relative;
+  aspect-ratio: 1; max-width: 100%;
+  border: 0; padding: 0; background: none;
+  cursor: pointer;
+  perspective: 500px;
+}
+.mem-back, .mem-front {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  border-radius: 8px;
+  backface-visibility: hidden;
+  transition: transform 0.35s;
+}
+.mem-back {
+  font-family: var(--font-display); font-size: 1.6rem; color: var(--cyan);
+  background: rgba(46, 242, 255, 0.08);
+  border: 2px solid var(--cyan);
+}
+.mem-front {
+  font-size: 2rem;
+  background: #000;
+  border: 2px solid var(--pink);
+  transform: rotateY(180deg);
+}
+.mem-card.flip .mem-back { transform: rotateY(180deg); }
+.mem-card.flip .mem-front { transform: rotateY(360deg); }
+.mem-card.done .mem-front { border-color: var(--green); box-shadow: 0 0 12px rgba(125, 255, 79, 0.5); }
+
+.spy-grid {
+  --n: 3;
+  display: grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  gap: 4px;
+  width: min(100%, 380px);
+  margin: 0 auto;
+}
+.spy-cell {
+  aspect-ratio: 1; max-width: 100%;
+  font-size: calc(min(100vw, 380px) / var(--n) * 0.5);
+  line-height: 1;
+  padding: 0;
+  background: rgba(46, 242, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.arena {
+  position: relative;
+  aspect-ratio: 1; max-width: 100%;
+  width: min(100%, 420px);
+  margin: 0 auto;
+  border: 2px solid var(--cyan);
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(46, 242, 255, 0.07) 1px, transparent 1px) 0 0 / 10% 10%,
+    linear-gradient(90deg, rgba(46, 242, 255, 0.07) 1px, transparent 1px) 0 0 / 10% 10%,
+    #000;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+.target {
+  position: absolute;
+  width: 15%; aspect-ratio: 1;
+  display: grid; place-items: center;
+  font-size: clamp(1.4rem, 7vw, 2.2rem);
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  background: rgba(46, 242, 255, 0.15);
+  box-shadow: 0 0 14px var(--cyan);
+  cursor: pointer;
+  animation: pop 0.15s ease-out;
+}
+.target.bomb { border-color: var(--red); background: rgba(255, 51, 85, 0.15); box-shadow: 0 0 14px var(--red); }
+@keyframes pop { from { transform: scale(0.3); } }
+
 /* ---------- Spielregeln ---------- */
 .rules { display: flex; flex-direction: column; gap: 12px; }
 .rule {
