@@ -38,7 +38,7 @@ window.CONFIG = {
       closes: "2026-10-21T20:00",
       prize: 10,
       proof: "ZEBRA-21",
-      solved: false,
+      solved: true,
     },
     {
       id: "rechner",
