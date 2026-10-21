@@ -47,7 +47,9 @@ window.CONFIG = {
       agent: "Agent Leo",
       avatar: "🤖",
       bonus: 0,
-      wishes: [],
+      wishes: [
+        { name: "Wave ball", url: "https://share.temu.com/V7KNscqYGrB", price: 9, ordered: false },
+      ],
     },
   ],
 };

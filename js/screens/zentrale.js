@@ -34,7 +34,8 @@
                   <span class="agent-avatar" aria-hidden="true">${UI.esc(k.avatar || "🕵️")}</span>
                   <span class="agent-info">
                     <span class="agent-name">${UI.esc(k.agent)}</span>
-                    <span class="agent-money">${UI.chf(Game.money(k.id))}</span>
+                    <span class="agent-money ${Game.money(k.id) - Game.wishTotal(k.id) < 0 ? "bad" : ""}">Übrig: ${UI.chf(Game.money(k.id) - Game.wishTotal(k.id))}</span>
+                    <span class="agent-sub">Konto ${UI.chf(Game.money(k.id))} · Wünsche ${UI.chf(Game.wishTotal(k.id))}</span>
                     <span class="agent-link">Profil &amp; Wunschliste ▶</span>
                   </span>
                 </button>`;

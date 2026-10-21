@@ -522,6 +522,7 @@ body {
 .agent-info { display: flex; flex-direction: column; min-width: 0; }
 .agent-name { font-weight: 800; font-size: 1.15rem; overflow-wrap: anywhere; }
 .agent-money { font-family: var(--font-display); color: var(--green); font-size: 1.1rem; }
+.agent-sub { color: var(--muted); font-size: 0.9rem; }
 .agent-link { font-family: var(--font-term); font-size: 1.05rem; color: var(--cyan); }
 
 .missions { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
