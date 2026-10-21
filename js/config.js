@@ -37,7 +37,9 @@ window.CONFIG = {
       agent: "Agent Lisa",
       avatar: "🦊",
       bonus: 0,
-      wishes: [],
+      wishes: [
+        { name: "Squishy", url: "https://share.temu.com/V7KNscqYGrB", price: 4.84, ordered: false },
+      ],
     },
     {
       id: "leo",
