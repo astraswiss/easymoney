@@ -587,6 +587,33 @@ body {
 .wish-empty { color: var(--muted); font-style: italic; list-style: none; }
 .send-text { min-height: 9em; font-family: var(--font-term); font-size: 1.1rem; }
 
+/* ---------- Spielregeln ---------- */
+.rules { display: flex; flex-direction: column; gap: 12px; }
+.rule {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+.rule h2 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--cyan);
+}
+.rule p { margin: 0 0 6px; }
+.rule p:last-child { margin-bottom: 0; }
+.rule ul, .rule ol { margin: 4px 0 6px; padding-left: 1.4em; }
+.rule li + li { margin-top: 2px; }
+.rule-money { border-color: var(--green); background: rgba(125, 255, 79, 0.06); }
+.rule-money h2 { color: var(--green); }
+.rule-important { border-color: var(--orange); background: rgba(255, 138, 31, 0.08); }
+.rule-important h2 { color: var(--orange); }
+
+.clues { margin: 6px 0 0; padding-left: 1.4em; font-weight: 600; }
+.panel.alarm { box-shadow: 0 0 0 2px var(--red), 0 0 50px rgba(255, 51, 85, 0.6); animation: alarm 0.8s infinite; }
+@keyframes alarm { 50% { box-shadow: 0 0 0 2px var(--red), 0 0 10px rgba(255, 51, 85, 0.2); } }
+
 /* ---------- Mission 2: Code ---------- */
 .code-msg { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 22px; }
 .code-word { display: flex; flex-wrap: wrap; gap: 6px; }

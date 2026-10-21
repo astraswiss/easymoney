@@ -14,11 +14,13 @@ Dann sind alle Missionen sofort offen.
 ## So läuft das Spiel
 
 1. **Mission 1 – Das geheime Passwort**: Das Passwort steht auf einem Zettel bei Baci Bardh zu Hause.
+   Danach kommen die **Spielregeln** (auch immer über die Zentrale erreichbar).
 2. **Missionen 2–5** öffnen sich zu den Zeiten in `js/config.js` (`opens`), mit Countdown in der Zentrale:
-   - 2: Der Code-Knacker (Zahlen-Code A=1 … Z=26)
-   - 3: Das Laser-Gedächtnis (Farben nachdrücken)
-   - 4: Der Preis-Detektiv (genau Fr. 20.– und Fr. 17.– ausgeben)
-   - 5: Der letzte Tresor (Beweis-Ziffern rückwärts: 2 9 4 7)
+   - 2: Der Code-Knacker – Zahlen-Code, jede Zahl um 2 zu groß. Lösung: AGENTEN LIEBEN PIZZA
+   - 3: Das Laser-Gedächtnis – Farben nachdrücken, 4 bis 8 Laser, immer schneller
+   - 4: Der Preis-Detektiv – 3 Einkäufe: Fr. 12.30 (Brille + Lampe), Fr. 17.– mit 3 Sachen
+     (Brille + Tinte + Fingerabdruck-Set), Fr. 20.30 mit 4 Sachen (Brille + Lampe + Schnurrbart + Fingerabdruck-Set)
+   - 5: Der letzte Tresor – Beweis-Ziffern nach 3 Hinweisen ordnen: 9 4 7 2. Nach 3 Fehlern 30 Sekunden Alarm.
 3. Jede Mission bringt **jedem Kind Fr. 10.–** (Total 100 Franken).
 4. Im **Profil** tragen die Kinder Temu-Links mit Preis ein und schicken sie an Baci Bardh.
 

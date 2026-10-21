@@ -1,13 +1,15 @@
 /*
  * MISSION 2: Der Code-Knacker.
- * Eine Nachricht in Zahlen: A=1, B=2, ... Z=26. Die Kinder tippen die Buchstaben ein.
+ * Eine Nachricht in Zahlen. A=1, B=2 ... Z=26 – aber jede Zahl ist um SHIFT zu groß.
+ * Beim Prüfen wird nur gesagt, WIE VIELE Buchstaben falsch sind, nicht welche.
  */
 (function () {
   const PHASE = {
     n: 2,
-    secret: "SUPER AGENT", // die geheime Nachricht (nur Buchstaben A–Z und Leerzeichen)
-    hintAfter: 2,
-    hintText: "TIPP: Sucht jede Zahl in der Tabelle. 19 ist S!",
+    secret: "AGENTEN LIEBEN PIZZA", // nur Buchstaben A–Z und Leerzeichen
+    shift: 2, // jede Zahl ist um so viel zu groß
+    hintAfter: 3,
+    hintText: "TIPP: Die erste Zahl ist 3. Und 3 − 2 = 1. 1 ist A!",
   };
 
   const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -16,18 +18,24 @@
     render(root, app) {
       let attempts = 0;
       const words = PHASE.secret.split(" ");
+      const num = (ch) => ABC.indexOf(ch) + 1 + PHASE.shift;
 
       root.innerHTML = UI.missionFrame(PHASE.n, `
         <p class="lead center" id="lead"></p>
+
+        <div class="task-box">
+          <span class="label">&gt; ACHTUNG, TRICK!</span>
+          <p>Der Feind hat den Code verschoben. Jede Zahl ist um <b>${PHASE.shift} zu groß</b>. Rechnet zuerst minus ${PHASE.shift}!</p>
+        </div>
 
         <div class="code-msg" id="code">
           ${words.map((w) => `
             <div class="code-word">
               ${[...w].map((ch) => `
                 <label class="code-cell">
-                  <span class="code-num">${ABC.indexOf(ch) + 1}</span>
+                  <span class="code-num">${num(ch)}</span>
                   <input class="code-input" maxlength="1" autocomplete="off" autocapitalize="characters"
-                         spellcheck="false" data-ch="${ch}" aria-label="Buchstabe für Zahl ${ABC.indexOf(ch) + 1}">
+                         spellcheck="false" data-ch="${ch}" aria-label="Buchstabe für Zahl ${num(ch)}">
                 </label>`).join("")}
             </div>`).join("")}
         </div>
@@ -54,8 +62,7 @@
 
       inputs.forEach((inp, i) => {
         inp.addEventListener("input", () => {
-          inp.value = inp.value.replace(/[^a-zäöü]/gi, "").slice(-1).toUpperCase();
-          inp.classList.remove("wrong", "right");
+          inp.value = inp.value.replace(/[^a-z]/gi, "").slice(-1).toUpperCase();
           if (inp.value) { Sound.play("key"); if (inputs[i + 1]) inputs[i + 1].focus(); }
         });
         inp.addEventListener("keydown", (e) => {
@@ -67,21 +74,16 @@
       root.querySelector("#check").addEventListener("click", check);
 
       function check() {
-        if (inputs.some((x) => !x.value)) {
+        const missing = inputs.filter((x) => !x.value).length;
+        if (missing) {
           Sound.play("blip");
           feedback.className = "feedback almost";
-          feedback.textContent = "Es fehlen noch Buchstaben, Agent!";
+          feedback.textContent = `Es fehlen noch ${missing} Buchstaben, Agent!`;
           return;
         }
-        let allRight = true;
-        inputs.forEach((x) => {
-          const ok = x.value === x.dataset.ch;
-          x.classList.toggle("right", ok);
-          x.classList.toggle("wrong", !ok);
-          if (!ok) allRight = false;
-        });
-        if (allRight) {
-          inputs.forEach((x) => (x.disabled = true));
+        const wrongCount = inputs.filter((x) => x.value !== x.dataset.ch).length;
+        if (!wrongCount) {
+          inputs.forEach((x) => { x.disabled = true; x.classList.add("right"); });
           root.querySelector("#check").disabled = true;
           feedback.className = "feedback";
           feedback.textContent = "";
@@ -89,7 +91,9 @@
           return;
         }
         attempts++;
-        UI.wrong(panel, feedback);
+        UI.wrong(panel, feedback, wrongCount === 1
+          ? "FALSCH! 😂 Ein Buchstabe stimmt nicht. Welcher wohl?"
+          : `FALSCH! 😂 ${wrongCount} Buchstaben stimmen nicht. ${CONFIG.uncle} glaubt nicht an euch!`);
         if (attempts >= PHASE.hintAfter) {
           const hint = root.querySelector("#hint");
           hint.hidden = false;

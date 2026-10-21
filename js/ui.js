@@ -173,7 +173,7 @@
       lines: (extra.lines || []).concat(lines),
       button: extra.button,
       share: missionReport(n),
-      onDone: () => app.go(extra.next || "zentrale"),
+      onDone: () => app.go(extra.next || "zentrale", extra.next === "regeln" ? { first: true } : {}),
     });
   }
 

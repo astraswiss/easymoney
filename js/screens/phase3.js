@@ -5,8 +5,8 @@
 (function () {
   const PHASE = {
     n: 3,
-    startLength: 3, // so viele Laser in Runde 1
-    goalLength: 6, // so viele Laser in der letzten Runde
+    startLength: 4, // so viele Laser in Runde 1
+    goalLength: 8, // so viele Laser in der letzten Runde (jede Runde wird auch schneller)
   };
 
   const PADS = [
@@ -35,7 +35,7 @@
       UI.bindBack(root, app);
 
       FX.typeText(root.querySelector("#lead"),
-        "Die Laser leuchten in einer geheimen Reihenfolge. Schaut gut zu und drückt sie dann genau gleich!");
+        "Die Laser leuchten in einer geheimen Reihenfolge. Schaut gut zu und drückt sie dann genau gleich! Jede Runde wird länger und schneller.");
 
       const panel = root.querySelector(".panel");
       const pads = [...root.querySelectorAll(".pad")];
@@ -66,10 +66,11 @@
         feedback.className = "feedback";
         feedback.textContent = "Gut zuschauen …";
         await FX.wait(600);
+        const speed = Math.max(220, 420 - (seq.length - PHASE.startLength) * 45);
         for (const i of seq) {
           if (cancelled) return;
-          await flash(i);
-          await FX.wait(200);
+          await flash(i, speed);
+          await FX.wait(speed / 2);
         }
         if (cancelled) return;
         feedback.textContent = "Jetzt ihr!";

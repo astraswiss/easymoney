@@ -47,6 +47,8 @@
             <p class="hint" id="report-msg" role="status" aria-live="polite"></p>
           </div>
 
+          <button class="btn ghost" type="button" id="rules">📜 Spielregeln: Wie funktioniert das Spiel?</button>
+
           ${digits.length ? `
             <div class="evidence">
               <span class="label">&gt; BEWEIS-ZIFFERN (gut merken!)</span>
@@ -98,6 +100,11 @@
         lastOpen = open;
         if (list.querySelector(".pill.wait")) drawMissions();
       }, 1000);
+
+      root.querySelector("#rules").addEventListener("click", () => {
+        Sound.play("click");
+        app.go("regeln");
+      });
 
       root.querySelectorAll("[data-kid]").forEach((b) =>
         b.addEventListener("click", () => {

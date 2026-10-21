@@ -54,6 +54,7 @@
 
           <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
           <p class="hint" id="hint" hidden></p>
+          <button class="btn ghost" type="button" id="rules">📜 Wie funktioniert das Spiel?</button>
         </div>`;
 
       const panel = root.querySelector(".panel");
@@ -62,6 +63,11 @@
       const feedback = root.querySelector("#feedback");
       const hint = root.querySelector("#hint");
       const lock = root.querySelector(".lock");
+
+      root.querySelector("#rules").addEventListener("click", () => {
+        Sound.play("click");
+        app.go("regeln", { back: "login" });
+      });
 
       FX.typeText(
         root.querySelector("#lead"),
@@ -117,7 +123,8 @@
           title: "ZUGANG ERLAUBT!",
           sub: "Willkommen in der geheimen Zentrale!",
           lines: ["> Firewall wird umgangen ... OK", "> Tür zur Zentrale ... OFFEN"],
-          button: "Zentrale betreten ▶",
+          button: "Weiter zu den Spielregeln ▶",
+          next: "regeln",
         });
       }
 
