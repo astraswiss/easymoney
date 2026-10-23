@@ -13,7 +13,7 @@ window.CONFIG = {
   prizePerPhase: 10, // Franken pro Kind und geschaffter Mission (5 × 10 × 2 = 100)
 
   // Missionen, die Lisa und Leo schon geschafft haben, z. B. [1, 2]
-  solved: [1, 2],
+  solved: [1, 2, 3],
 
   // Die 5 Missionen.
   // opens: ab wann die Mission spielbar ist ("JJJJ-MM-TTTHH:MM", null = sofort)
